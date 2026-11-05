@@ -1,0 +1,20 @@
+{
+ "id": "./frontdesk.html",
+ "name": "AHASS Front Desk",
+ "short_name": "Front Desk",
+ "description": "Front desk AHASS Cenderawasih Motor 3",
+ "lang": "id",
+ "start_url": "./frontdesk.html",
+ "scope": "./",
+ "display": "standalone",
+ "display_override": ["standalone", "minimal-ui"],
+ "orientation": "any",
+ "background_color": "#cc0000",
+ "theme_color": "#cc0000",
+ "icons": [
+  {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+  {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+  {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable"},
+  {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+ ]
+}

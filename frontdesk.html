@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script src="firebase-config.js"></script><script src="fb.js"></script>
+<link rel="manifest" href="manifest-frontdesk.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<script>if('serviceWorker' in navigator)addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})})</script>
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="format-detection" content="telephone=no">
+
+<title>AHASS Cenderawasih Motor 3 · Front Desk</title>
+<meta name="theme-color" content="#cc0000">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23cc0000'/%3E%3Ctext x='50' y='72' font-size='64' font-weight='900' font-family='Arial,sans-serif' text-anchor='middle' fill='%23fff'%3EA%3C/text%3E%3C/svg%3E">
+<style>
+:root{--bg:#f3f3f3;--card:#fff;--tx:#1a1a1a;--mu:#666;--bd:#dcdcdc;--ac:#cc0000;--ok:#15803d;--yl:#ca8a04;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141414;--card:#212121;--tx:#f0f0f0;--mu:#9a9a9a;--bd:#363636;--ac:#ef4444;--ok:#4ade80;--yl:#facc15}}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.4 system-ui,-apple-system,Segoe UI,sans-serif}
+main{max-width:720px;margin:0 auto;padding:14px}
+h2{font-size:15px;margin:0 0 8px;border-left:4px solid var(--ac);padding-left:8px}
+.hd{background:#cc0000;color:#fff;padding:10px 14px;border-bottom:3px solid #1a1a1a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .hd{background:#a30000}}
+.hd .in{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.br{display:flex;align-items:center;gap:10px}
+.bdg{background:#fff;color:#cc0000;font-weight:900;font-style:italic;letter-spacing:1px;border-radius:6px;padding:3px 9px;font-size:19px;line-height:1.2}
+.nm{font-weight:800;font-size:15px;text-transform:uppercase;line-height:1.15}.sb{font-size:11px;opacity:.9}
+.card{background:var(--card);border:1px solid var(--bd);border-top:3px solid var(--ac);border-radius:10px;padding:12px;margin-bottom:12px}
+.g{display:grid;grid-template-columns:1fr 1fr;gap:8px}.s2{grid-column:span 2}
+label{font-size:12px;color:var(--mu);display:block;margin-bottom:2px}
+input,select,textarea{width:100%;padding:10px 8px;border:1px solid var(--bd);border-radius:6px;background:var(--bg);color:var(--tx);font:inherit;min-width:0}
+.btn{padding:10px 14px;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:8px;cursor:pointer;font:inherit;min-height:42px}
+.btn.p{background:var(--ac);border-color:var(--ac);color:#fff;font-weight:700}
+.btn.x{color:#b91c1c;padding:10px 0}
+.btn:disabled{opacity:.5}
+.hd .btn{background:transparent;border-color:rgba(255,255,255,.75);color:#fff;font-size:13px;min-height:36px;padding:6px 10px}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--ac);outline-offset:1px}
+.row{display:grid;gap:6px;align-items:end;margin-bottom:8px;padding-bottom:8px;border-bottom:1px dashed var(--bd)}
+.rs{grid-template-columns:1.4fr 1.2fr 1fr 1.1fr 40px}
+.rp{grid-template-columns:2.2fr 70px 1fr 40px}
+@media (max-width:640px){.rs{grid-template-columns:1fr 1fr}.rs .x{grid-column:span 2;text-align:right}.rp{grid-template-columns:1fr 70px}.rp .x{grid-column:span 2;text-align:right}}
+.ro{padding:8px 0;color:var(--mu);font-size:13px}
+.cb{position:relative}.cbl{position:absolute;z-index:20;left:0;right:0;top:100%;max-height:230px;overflow:auto;background:var(--card);border:1px solid var(--bd);border-radius:6px;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.cbl div{padding:9px 10px;cursor:pointer;border-bottom:1px solid var(--bd)}.cbl div:hover{background:var(--bg)}.cbl .none{color:var(--mu);cursor:default}
+.rec{position:relative;margin:2px 0 10px;padding:10px;border:1px solid var(--ac);border-left-width:4px;border-radius:8px;background:var(--bg);font-size:13px}
+.rec .rct{display:block;padding-right:28px}.rec .opts{display:grid;grid-template-columns:1fr;gap:8px;margin-top:8px}
+.rec .opt{text-align:left;padding:8px 10px;line-height:1.3;height:auto;white-space:normal}.rec .opt.on{background:var(--ac);border-color:var(--ac);color:#fff}
+.rec .rcx{position:absolute;top:6px;right:6px;width:24px;min-height:24px;padding:0;font-size:11px}
+.sum div{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--bd)}.sum .b{font-weight:700;font-size:16px;border:0}
+.q{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid var(--bd)}.q:last-child{border:0}
+.qn{font-weight:800;color:var(--ac);margin-right:6px}
+.st{font-size:12px;font-weight:700;border-radius:999px;padding:2px 9px;border:1px solid var(--bd);white-space:nowrap}
+.st.Done{color:var(--ok);border-color:var(--ok)}.st.IP{color:var(--ac);border-color:var(--ac)}.st.W{color:var(--yl);border-color:var(--yl)}
+.mu{color:var(--mu);font-size:12px}
+.msg{padding:10px;border-radius:8px;margin-bottom:12px;font-size:14px}
+.msg.ok{background:rgba(21,128,61,.12);color:var(--ok);border:1px solid var(--ok)}
+.msg.er{background:rgba(185,28,28,.1);color:#b91c1c;border:1px solid #b91c1c}
+.tabs{display:flex;gap:6px;margin-bottom:12px}.tabs button{flex:1}.tabs .on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#9a9a9a;margin-right:4px}.dot.on{background:#4ade80}
+.rpt{display:grid;grid-template-columns:1.2fr 2fr .6fr 1fr 1fr 1fr;gap:6px;align-items:end;padding:9px 0;border-bottom:1px dashed var(--bd)}
+.rpt .v{padding:9px 0;font-weight:600;word-break:break-word}.rpt .sv{grid-column:1/-1;display:flex;gap:8px;align-items:center;justify-content:flex-end}
+@media (max-width:640px){.rpt{grid-template-columns:1fr 1fr 1fr}}
+.lock{font-size:12px;color:var(--mu)}
+.dg{border:2px solid var(--bd);border-radius:10px;margin-bottom:10px;overflow:hidden}
+.dgh{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 12px;background:var(--bg);cursor:pointer;user-select:none}
+.dgb{padding:0 12px;border-top:1px solid var(--bd)}
+.chev{display:inline-block;transition:transform .15s}.chev.cl{transform:rotate(-90deg)}
+.card.mn>h2{cursor:pointer;user-select:none;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.card.mn>h2::after{content:"▾";font-size:14px;color:var(--mu);transition:transform .15s}
+.card.mn.cl>h2{margin-bottom:0}.card.mn.cl>h2::after{transform:rotate(-90deg)}
+.card.mn.cl>:not(h2){display:none!important}
+.warn{border:2px solid var(--ac)}.warn h2{color:var(--ac)}
+.hist{padding:7px 0;border-bottom:1px solid var(--bd)}.hist:last-child{border:0}
+.scn{position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.82);display:flex;align-items:center;justify-content:center;padding:14px;overflow:auto}
+.scn .bx{width:100%;max-width:460px;background:var(--card);color:var(--tx);border:1px solid var(--bd);border-top:4px solid var(--ac);border-radius:12px;padding:14px}
+.scv{position:relative;margin:10px 0;border-radius:8px;overflow:hidden;background:#000;aspect-ratio:4/3}
+.scv video{width:100%;height:100%;object-fit:cover;display:block}
+.scv .scl{position:absolute;left:10%;right:10%;top:50%;height:2px;background:#ff3b3b;box-shadow:0 0 8px #ff3b3b}
+.scm{font-size:13px;color:var(--mu);margin:6px 0 10px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:#111;color:#fff;padding:10px 14px;border-radius:8px;z-index:10001;font-size:14px;max-width:90%}
+
+/* ================= MOBILE OPTIMIZATION ================= */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
+body{-webkit-font-smoothing:antialiased}
+@media (max-width:700px){body{overflow-x:clip;touch-action:manipulation}}
+img,video,canvas,svg{max-width:100%}
+button,.btn,select,summary,[onclick]{touch-action:manipulation}
+@media (max-width:700px){
+  body{font-size:15px}
+  main{padding:10px 10px calc(24px + env(safe-area-inset-bottom,0px))!important}
+  /* 16px inputs stop iOS Safari auto-zoom on focus; 44px = comfortable thumb target */
+  input,select,textarea{font-size:16px!important;min-height:44px;padding:10px!important;border-radius:8px}
+  input[type=checkbox],input[type=radio]{min-height:0;width:22px;height:22px;padding:0!important}
+  input[type=date],input[type=month],input[type=time]{-webkit-appearance:none;appearance:none;min-width:0;background:var(--bg)}
+  label{font-size:12.5px;margin-bottom:3px}
+  .btn{min-height:44px!important;padding:10px 14px;border-radius:10px;font-size:15px}
+  .btn:active{transform:scale(.97);filter:brightness(.92)}
+  .x{min-height:44px;display:flex;align-items:center;justify-content:center}
+  .card{padding:12px 10px;border-radius:12px;margin-bottom:10px}
+  h1{font-size:18px}
+  h2{font-size:15px}
+  /* header: compact + sticky, respects notch */
+  .hd{padding:8px 12px 14px!important;position:sticky;top:0;z-index:50}
+  .hd .in{flex-wrap:nowrap!important;gap:8px}
+  .hd .nm{font-size:14px!important;letter-spacing:.3px}
+  .hd .sb{font-size:10px!important}
+  .bdg{font-size:17px!important;padding:2px 8px!important}
+  .hd .btn{min-height:40px!important;padding:6px 10px;font-size:13px}
+  /* form grids: single column feels natural on phones, keep 2-col for short numeric fields */
+  .g{gap:8px}
+  .g>div{min-width:0}
+  .row{gap:8px;padding:10px;margin-bottom:10px;border:1px solid var(--bd);border-radius:10px;background:var(--bg)}
+  /* dropdown suggestions: bigger rows, capped to viewport */
+  .cbl{max-height:min(260px,40vh);-webkit-overflow-scrolling:touch}
+  .cbl div{padding:12px 10px;min-height:44px}
+  /* tables: smooth horizontal scroll, sticky first column */
+  .sc{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -4px;padding:0 4px;overscroll-behavior-x:contain}
+  .sc table{font-size:12.5px!important}
+  .sc th:first-child,.sc td:first-child{position:sticky;left:0;background:var(--card);z-index:1}
+  /* history rows */
+  .hist{padding:10px 0;flex-wrap:wrap}
+  .dgh{padding:12px;min-height:48px}
+  .dht{min-height:44px}
+  .card.mn>h2{min-height:44px}
+  /* scanner + modals fill the screen like a sheet */
+  .scn{padding:0!important;align-items:flex-end!important}
+  .scn .bx{max-width:none!important;border-radius:16px 16px 0 0!important;padding:14px 14px calc(14px + env(safe-area-inset-bottom,0px))!important;max-height:92vh;overflow:auto}
+  .scv{aspect-ratio:3/4}
+  /* toast sits above home bar */
+  .toast{bottom:calc(16px + env(safe-area-inset-bottom,0px));max-width:92%;font-size:14px}
+  .ft{font-size:11px;padding-bottom:calc(18px + env(safe-area-inset-bottom,0px))}
+}
+@media (max-width:380px){
+  .hd .sb{display:none}
+  .btn{padding:10px}
+}
+@media (hover:none){
+  .cbl div:hover{background:transparent}
+}
+@media (orientation:landscape) and (max-height:480px){
+  .hd{position:static}
+  .scn .bx{max-height:98vh}
+}
+
+@media (max-width:700px){
+  main{max-width:none!important}
+  .tabs{position:sticky;top:calc(env(safe-area-inset-top,0px) + 54px);z-index:40;background:var(--bg);padding:6px 0;margin:0 -10px 10px;padding-left:10px;padding-right:10px}
+  .tabs button{min-height:46px!important;font-weight:600}
+  .tabs{gap:4px}.tabs button{min-width:0;padding:8px 2px;font-size:13px;line-height:1.15}
+  @media (max-width:380px){.tabs button{font-size:12px}}
+  @media (max-width:340px){.tabs button{font-size:11px}}
+  .rs{grid-template-columns:1fr 1fr!important}
+  .rs>:first-child{grid-column:1/-1}
+  .rs .x,.rp .x{grid-column:1/-1!important}
+  .rp{grid-template-columns:1fr 90px!important}
+  .rpt{grid-template-columns:1fr 1fr!important;gap:8px;padding:12px 0}
+  .rpt .sv{justify-content:stretch}.rpt .sv .btn{flex:1}
+  .q{padding:12px 0;flex-wrap:wrap}
+  .st{font-size:12px;padding:4px 10px}
+  .msg{font-size:14px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 58px);z-index:45}
+  .s2{grid-column:1/-1}
+  .rec .opts{grid-template-columns:1fr}
+  .rec .opt{min-height:48px}
+  .rec .rcx{width:32px!important;min-height:32px!important}
+  /* primary action buttons: full width, easy thumb reach */
+  .card>.btn.p,.card>div>.btn.p:only-child{width:100%;min-height:50px!important;font-size:16px}
+  textarea{min-height:88px}
+}
+</style><script>/* Indonesian (Bahasa Indonesia) translation layer. Stored data values (statuses, reasons, etc.) are left untouched. */
+(function(){
+var EX={"Work Order": "Work Order", "Services": "Jasa", "Spareparts": "Sparepart", "Process": "Proses", "Overhaul": "Overhaul", "Motor Types": "Jenis Motor", "Mechanics": "Mekanik", "Mechanic Monthly": "Mekanik Bulanan", "Profit Monthly": "Laba Bulanan", "Expense": "Pengeluaran", "Salary": "Gaji", "Tax & Reorder Monthly": "Pajak & Restok Bulanan", "History (": "Riwayat (", "Sync": "Sinkron", "Today's Queue": "Antrian", "Process (": "Proses (", "Spareparts (": "Sparepart (", "New Spareparts (": "Sparepart Baru (", "Front Desk": "Front Desk", "Front desk:": "Front desk:", "Enter PIN": "Masukkan PIN", "Unlock": "Buka kunci", "Cancel": "Batal", "Create a PIN": "Buat PIN", "Change PIN": "Ganti PIN", "Save PIN": "Simpan PIN", "Save": "Simpan", "Choose 4–8 digits to protect this app on this device.": "Pilih 4–8 angka untuk melindungi aplikasi ini di perangkat ini.", "Confirm PIN": "Konfirmasi PIN", "Confirm new PIN": "Konfirmasi PIN baru", "Current PIN": "PIN saat ini", "New PIN": "PIN baru", "Enter your 4–8 digit PIN.": "Masukkan PIN 4–8 angka Anda.", "The PIN must be 4–8 digits.": "PIN harus 4–8 angka.", "The new PIN must be 4–8 digits.": "PIN baru harus 4–8 angka.", "The new PINs do not match.": "PIN baru tidak sama.", "The two PINs do not match.": "Kedua PIN tidak sama.", "Wrong PIN.": "PIN salah.", "PIN changed.": "PIN diganti.", "Too many wrong attempts. Try again in 30s.": "Terlalu banyak percobaan salah. Coba lagi dalam 30 detik.", "🔒 Lock": "🔒 Kunci", "🔒 Locked · only the owner can change this": "🔒 Terkunci · hanya pemilik yang bisa mengubahnya", "This app needs JavaScript enabled.": "Aplikasi ini membutuhkan JavaScript aktif.", "Close": "Tutup", "Open": "Buka", "Done": "Selesai", "Done:": "Selesai:", "Delete?": "Hapus?", "Delete this order?": "Hapus order ini?", "Remove": "Hapus ", "Undo": "Urungkan", "Print": "Cetak", "New": "Baru", "Name": "Nama", "Price": "Harga", "Qty": "Jml", "QTY": "QTY", "Date": "Tanggal", "Day": "Hari", "Month": "Bulan", "Today": "Hari ini", "Status": "Status", "Type": "Jenis", "Note": "Catatan", "Notes": "Catatan", "Reason": "Alasan", "Other": "Lainnya", "Total": "Total", "Customer": "Pelanggan", "Phone": "Telepon", "Address": "Alamat", "Address (optional)": "Alamat (opsional)", "Pending": "Tertunda", "Failed": "Gagal", "Failed:": "Gagal:", "Working…": "Memproses…", "Preparing…": "Menyiapkan…", "Amount": "Jumlah", "Cost": "Biaya", "Profit": "Laba", "Tax": "Pajak", "Salaries": "Gaji", "Staff": "Staf", "Role": "Jabatan", "Worker": "Pekerja", "Log": "Catatan", "Work": "Pekerjaan", "Orders": "Order ", "Jobs": "Pekerjaan", "Motors": "Motor", "Summary": "Ringkasan", "Daily": "Harian", "Monthly": "Bulanan", "Remaining": "Sisa", "Started": "Dimulai", "Due": "Jatuh tempo", "Advance": "Kasbon", "Advances": "Kasbon", "Deducted": "Dipotong", "Reorder": "Restok", "Not found.": "Tidak ditemukan.", "Nothing found": "Tidak ditemukan", "No match": "Tidak cocok", "No date": "Tanpa tanggal", "Offline": "Offline", "Connected": "Terhubung", "Connect": "Hubungkan", "Disconnect": "Putuskan", "Enter": "Enter", "Already exists": "Sudah ada", "Conflict": "Konflik", "Exported": "Diekspor", "Excel": "Excel", "Waiting": "Menunggu", "In Progress": "Dikerjakan", "Waiting for Parts": "Menunggu Sparepart", "DELAYED": "TERLAMBAT", "Out of stock": "Stok habis", "Customer short of money": "Pelanggan kurang uang", "Walk-in": "Walk-in", "TOTAL": "TOTAL", "SKU": "SKU", "Rp": "Rp", "OK": "OK", "Spareparts only (customer just buys parts, no service)": "Hanya sparepart (pelanggan hanya membeli sparepart, tanpa servis)", "Plate Number": "Nomor Polisi", "Plate number": "Nomor polisi", "Queue no.": "No. antrian", "Queue": "Antrian", "Start date": "Tanggal mulai", "Finish date": "Tanggal selesai", "Finish date (actual)": "Tanggal selesai (aktual)", "Estimated finish (due)": "Perkiraan selesai (jatuh tempo)", "Customer name": "Nama pelanggan", "Phone number": "Nomor telepon", "Engine number": "Nomor mesin", "Engine number (auto for NON DS)": "Nomor mesin (otomatis untuk NON DS)", "Engine number (only for NON DS — leave empty and it is made automatically)": "Nomor mesin (hanya untuk NON DS — kosongkan, akan dibuat otomatis)", "Customer address": "Alamat pelanggan", "Motor type": "Jenis motor", "Select motor…": "Pilih motor…", "List of Work": "Daftar Pekerjaan", "Service type (search)": "Jenis jasa (cari)", "Work description": "Deskripsi pekerjaan", "Service price": "Harga jasa", "Mechanic": "Mekanik", "— Select mechanic —": "— Pilih mekanik —", "— Select worker —": "— Pilih pekerja —", "— Pick saved expense —": "— Pilih pengeluaran tersimpan —", "+ Add work": "+ Tambah pekerjaan", "Part (search)": "Sparepart (cari)", "Reorder cost": "Biaya restok", "Reorder Cost": "Biaya Restok", "+ Add sparepart": "+ Tambah sparepart", "📷 Scan barcode": "📷 Scan barcode", "Discount": "Diskon", "Amount (Rp)": "Jumlah (Rp)", "Percent (%)": "Persen (%)", "Discount name (optional)": "Nama diskon (opsional)", "Applied to service + spareparts. The mechanic payout and tax stay the same; the store absorbs the discount.": "Berlaku untuk jasa + sparepart. Upah mekanik dan pajak tetap sama; diskon ditanggung toko.", "Note for next visit": "Catatan untuk kunjungan berikutnya", "What needs to be changed": "Apa yang perlu diganti", "+ Add note": "+ Tambah catatan", "Sparepart or work this motorcycle still needs (out of stock, or customer can't pay now). It will pop up the next time this plate number is entered.": "Sparepart atau pekerjaan yang masih dibutuhkan motor ini (stok habis, atau pelanggan belum bisa membayar sekarang). Akan muncul saat nomor polisi ini dimasukkan lagi.", "⚠ Note for this motorcycle (": "⚠ Catatan untuk motor ini (", "Save order": "Simpan order", "Clear form?": "Kosongkan formulir?", "Add at least one sparepart": "Tambahkan minimal satu sparepart", "Enter plate number": "Masukkan nomor polisi", "Enter the plate number first.": "Masukkan nomor polisi terlebih dahulu.", "Write what needs to be changed.": "Tulis apa yang perlu diganti.", "Delete this note?": "Hapus catatan ini?", "Select a mechanic for every work line (only Waiting status can be saved without a mechanic)": "Pilih mekanik untuk setiap baris pekerjaan (hanya status Menunggu yang boleh disimpan tanpa mekanik)", "Select a mechanic for every work line first (open the order and edit it).": "Pilih mekanik untuk setiap baris pekerjaan terlebih dahulu (buka order lalu ubah).", "Select the mechanic (only Waiting status can be saved without a mechanic).": "Pilih mekanik (hanya status Menunggu yang boleh disimpan tanpa mekanik).", "Select a mechanic for this overhaul job first.": "Pilih mekanik untuk pekerjaan overhaul ini terlebih dahulu.", "Mechanic on this work order": "Mekanik pada work order ini", "Service price total": "Total harga jasa", "Mechanic payout (68% of service)": "Upah mekanik (68% dari jasa)", "(fixed salary · no 68%, revenue to store after 2% tax)": "(gaji tetap · tanpa 68%, pendapatan masuk toko setelah pajak 2%)", "Total mechanic payout": "Total upah mekanik", "Sparepart price": "Harga sparepart", "Sparepart profit": "Laba sparepart", "Customer total": "Total pelanggan", "Service + spareparts": "Jasa + sparepart", "TOTAL TO PAY": "TOTAL BAYAR", "Store & tax": "Toko & pajak", "Store share of service (30%)": "Bagian toko dari jasa (30%)", "+ Revenue of fixed-salary mechanics (after 2% tax)": "+ Pendapatan mekanik bergaji tetap (setelah pajak 2%)", "+ Sparepart profit": "+ Laba sparepart", "(paid by store)": "(ditanggung toko)", "STORE PROFIT": "LABA TOKO", "TAX (2% of service)": "PAJAK (2% dari jasa)", "Service": "Jasa", "Service types & prices": "Jenis jasa & harga", "+ Add service type": "+ Tambah jenis jasa", "Search services…": "Cari jasa…", "Service name": "Nama jasa", "Service price (Rp)": "Harga jasa (Rp)", "Sell price": "Harga jual", "No sparepart found.": "Sparepart tidak ditemukan.", "No spareparts found.": "Sparepart tidak ditemukan.", "Show 50 more": "Tampilkan 50 lagi", "Showing": "Menampilkan", "Packages": "Paket", "Package": "Paket", "Package name": "Nama paket", "Search SKU or name…": "Cari SKU atau nama…", "Search part…": "Cari sparepart…", "Search or pick…": "Cari atau pilih…", "⬆ Import many (CSV / Excel)": "⬆ Impor banyak (CSV / Excel)", "Template CSV": "Template CSV", "⬇ Export (Excel)": "⬇ Ekspor (Excel)", "⬇ Export (CSV)": "⬇ Ekspor (CSV)", "Columns: SKU, Name, QTY (stock, default 0), Price, Profit, Jasa wo/s, Jasa w/s (the last two are optional). Existing SKUs are updated, new SKUs are added; nothing is deleted.": "Kolom: SKU, Name, QTY (stok, default 0), Price, Profit, Jasa wo/s, Jasa w/s (dua terakhir opsional). SKU yang sudah ada diperbarui, SKU baru ditambahkan; tidak ada yang dihapus.", "Reorder cost = sell price − profit (the part of the price set aside to buy stock again). QTY = stock; a part with QTY 0 can still be added to a Work Order or Overhaul, and the stock is reduced by the quantity used but never goes below 0. Jasa wo/s / w/s = replacement labor fee recommended in Work Order when this part is added. The list shows 50 spareparts at a time to keep the app fast; use the search to find any part.": "Biaya restok = harga jual − profit (bagian harga yang disisihkan untuk membeli stok lagi). QTY = stok; sparepart dengan QTY 0 tetap bisa ditambahkan ke Work Order atau Overhaul, dan stok berkurang sesuai jumlah terpakai tetapi tidak pernah di bawah 0. Jasa wo/s / w/s = biaya jasa penggantian yang direkomendasikan di Work Order saat sparepart ini ditambahkan. Daftar menampilkan 50 sparepart sekaligus agar aplikasi tetap cepat; gunakan pencarian untuk menemukan sparepart mana pun.", "Entered by the front desk. Fill in the": "Diinput oleh front desk. Isi", "(and QTY). When the profit is above 0 the part moves to Spareparts automatically, or press \"Move to Spareparts\".": "(dan QTY). Jika profit di atas 0, sparepart otomatis pindah ke Sparepart, atau tekan \"Pindah ke Sparepart\".", "✓ Move to Spareparts": "✓ Pindah ke Sparepart", "Move to Spareparts": "Pindah ke Sparepart", "A package is a bundle of spareparts (for example V-Belt). In Work Order and Overhaul, choose": "Paket adalah kumpulan sparepart (misalnya V-Belt). Di Work Order dan Overhaul, pilih", "next to + Add sparepart and every item is added at once, with its own price, profit and stock. Items are matched by SKU.": "di samping + Tambah sparepart dan semua item ditambahkan sekaligus, lengkap dengan harga, profit, dan stoknya. Item dicocokkan berdasarkan SKU.", "+ New package": "+ Paket baru", "New package": "Paket baru", "+ Add item": "+ Tambah item", "Package price:": "Harga paket:", "No package found": "Paket tidak ditemukan", "No package found.": "Paket tidak ditemukan.", "This package has no items yet.": "Paket ini belum memiliki item.", "This package has no items yet. Add the SKUs in the Spareparts tab.": "Paket ini belum memiliki item. Tambahkan SKU di tab Sparepart.", "✕ Delete package": "✕ Hapus paket", "Delete package": "Hapus paket ", "Search package, SKU or part name…": "Cari paket, SKU, atau nama sparepart…", "📦 Add package…": "📦 Tambah paket…", "📦 Add package (search)…": "📦 Tambah paket (cari)…", "+ Add sparepart (search)…": "+ Tambah sparepart (cari)…", "No items yet.": "Belum ada item.", "Spareparts (optional)": "Sparepart (opsional)", "Spareparts are added to the customer total. The sparepart profit goes to the store; there is no mechanic share or tax on parts.": "Sparepart ditambahkan ke total pelanggan. Laba sparepart masuk ke toko; tidak ada bagian mekanik maupun pajak untuk sparepart.", "Price not set yet · can be entered once": "Harga belum diatur · bisa diisi sekali", "Not in list yet (created with Rp 0 when used)": "Belum ada di daftar (dibuat dengan Rp 0 saat dipakai)", "Enter it once. After saving, the sell price and service fees are locked. If there is a mistake, ask the owner to change it in the main app.": "Isi sekali saja. Setelah disimpan, harga jual dan biaya jasa terkunci. Jika ada kesalahan, minta pemilik mengubahnya di aplikasi utama.", "Ask the cashier to add it in the main app.": "Minta kasir menambahkannya di aplikasi utama.", "Service fee to replace": "Biaya jasa penggantian", "Jasa ganti": "Jasa ganti", "is already in the list and its price is locked. Ask the owner to change it.": "sudah ada di daftar dan harganya terkunci. Minta pemilik mengubahnya.", "is not in the sparepart list.": "tidak ada di daftar sparepart.", "new from front desk": "baru dari front desk", "· new, will be sent with this order": "· baru, akan dikirim bersama order ini", "· not in parts list:": "· tidak ada di daftar sparepart:", "Enter the SKU.": "Masukkan SKU.", "Enter the name.": "Masukkan nama.", "Enter the sell price.": "Masukkan harga jual.", "After saving, only the owner can change these. Save?": "Setelah disimpan, hanya pemilik yang bisa mengubahnya. Simpan?", "Open the Spareparts tab and fill in the Profit first.": "Buka tab Sparepart dan isi Laba terlebih dahulu.", "Cannot set this job to Done / Finish.": "Pekerjaan ini tidak bisa diselesaikan (Selesai).", "These spareparts still have 0 profit:": "Sparepart berikut masih memiliki profit 0:", "These SKUs were not in your Spareparts list, so they were created with price Rp 0:": "SKU berikut belum ada di daftar Sparepart Anda, jadi dibuat dengan harga Rp 0:", "Open the Spareparts tab and fill in name, price and profit.": "Buka tab Sparepart dan isi nama, harga, dan profit.", "All saved orders": "Semua order tersimpan", "Minimize all days": "Ciutkan semua hari", "Expand all days": "Buka semua hari", "Search plate, motor, date, mechanic, service, sparepart…": "Cari nopol, motor, tanggal, mekanik, jasa, sparepart…", "Search history": "Cari riwayat", "No orders match your search.": "Tidak ada order yang cocok dengan pencarian.", "No saved orders yet.": "Belum ada order tersimpan.", "Service orders & overhaul": "Order servis & overhaul", "Spareparts only (walk-in)": "Hanya sparepart (walk-in)", "Store profit": "Laba toko", "Store profit ·": "Laba toko ·", "finished": "selesai", "store": "toko", "payout": "upah", "Process log (use it for delays, waiting for parts, next steps)": "Catatan proses (gunakan untuk keterlambatan, menunggu sparepart, langkah berikutnya)", "+ Add process note": "+ Tambah catatan proses", "What was done / why delayed": "Apa yang dikerjakan / alasan terlambat", "Last note (": "Catatan terakhir (", "What is it for?": "Untuk apa?", "What was it for?": "Untuk apa tadi?", "No open jobs. On the Work Order tab (or the Overhaul tab) set the status to Waiting, In Progress or Waiting for Parts, then save the job to track it here over several days.": "Tidak ada pekerjaan terbuka. Di tab Work Order (atau tab Overhaul) ubah status menjadi Menunggu, Dikerjakan, atau Menunggu Sparepart, lalu simpan pekerjaan untuk melacaknya di sini selama beberapa hari.", "Complaint / message for the mechanic (optional)": "Keluhan / pesan untuk mekanik (opsional)", "Message for the mechanic (optional)": "Pesan untuk mekanik (opsional)", "Description (optional)": "Deskripsi (opsional)", "Note (optional)": "Catatan (opsional)", "Engine overhaul": "Overhaul mesin", "Overhaul engine job": "Pekerjaan overhaul mesin", "Add overhaul engine job": "Tambah pekerjaan overhaul mesin", "+ Add overhaul job": "+ Tambah pekerjaan overhaul", "Overhaul price (Rp)": "Harga overhaul (Rp)", "Service type (98% store)": "Jenis jasa (98% toko)", "Customer total (overhaul + service + parts)": "Total pelanggan (overhaul + jasa + sparepart)", "Total overhaul price": "Total harga overhaul", "Total price": "Total harga", "Overhaul price: 80% to the mechanic (extra income on top of his salary), 18% to the store, 2% tax. Service type price: 98% to the store, 2% tax (no mechanic share).": "Harga overhaul: 80% untuk mekanik (pendapatan tambahan di atas gajinya), 18% untuk toko, 2% pajak. Harga jenis jasa: 98% untuk toko, 2% pajak (tanpa bagian mekanik).", "Enter the overhaul price or a service price.": "Masukkan harga overhaul atau harga jasa.", "Delete this overhaul job?": "Hapus pekerjaan overhaul ini?", "No overhaul jobs this month.": "Tidak ada pekerjaan overhaul bulan ini.", "Overhaul (18%)": "Overhaul (18%)", "Overhaul (80%)": "Overhaul (80%)", "Overhaul service (98%)": "Jasa overhaul (98%) ", "+ Overhaul engine (18%)": "+ Overhaul mesin (18%)", "+ Overhaul service type (98%)": "+ Jenis jasa overhaul (98%)", "Overhaul by month": "Overhaul per bulan", "Overhaul engine ·": "Overhaul mesin ·", "Overhaul jobs ·": "Pekerjaan overhaul ·", "Store (18%)": "Toko (18%)", "Service (98% store)": "Jasa (98% toko)", "Service (30%)": "Jasa (30%) ", "Mechanic (80%)": "Mekanik (80%)", "Mechanic payout (80%)": "Upah mekanik (80%)", "The mechanic's 80% is added to his total salary on the Salary tab (also for fixed-salary mechanics). The store's 18%, 98% of the service type price and the sparepart profit are added to Profit Monthly, and the 2% to Tax & Reorder Monthly.": "80% mekanik ditambahkan ke total gajinya di tab Gaji (juga untuk mekanik bergaji tetap). 18% toko, 98% harga jenis jasa, dan laba sparepart ditambahkan ke Laba Bulanan, dan 2% ke Pajak & Restok Bulanan.", "Store profit by month": "Laba toko per bulan", "− Discounts (paid by store)": "− Diskon (ditanggung toko)", "− Expenses (daily + monthly)": "− Pengeluaran (harian + bulanan)", "− Fixed mechanic salaries": "− Gaji tetap mekanik", "− Other workers salary": "− Gaji pekerja lain", "− Worker extra income": "− Pendapatan tambahan pekerja", "PROFIT STORE NOW": "LABA TOKO SAAT INI", "Profit now": "Laba saat ini", "Fixed-mech revenue": "Pendapatan mekanik gaji tetap", "Parts profit": "Laba sparepart", "Profit store now = store profit − expenses (daily and monthly) − fixed mechanic salaries − other workers' salaries (front desk, partman, etc.). Store profit = 30% of service + the service revenue of fixed-salary mechanics after the 2% tax + 18% of overhaul engine jobs + 98% of overhaul-tab service type prices + sparepart profit − discount, on finished orders (status Done), grouped by finish date. Salaries are counted once for every month in the list.": "Laba toko saat ini = laba toko − pengeluaran (harian dan bulanan) − gaji tetap mekanik − gaji pekerja lain (front desk, partman, dll.). Laba toko = 30% dari jasa + pendapatan jasa mekanik bergaji tetap setelah pajak 2% + 18% dari pekerjaan overhaul mesin + 98% dari harga jenis jasa di tab Overhaul + laba sparepart − diskon, pada order selesai (status Selesai), dikelompokkan menurut tanggal selesai. Gaji dihitung sekali untuk setiap bulan dalam daftar.", "ALL MONTHS": "SEMUA BULAN", "Based on finished orders (status Done), grouped by the finish date. Jobs = number of work lines done by that mechanic. Fixed salary mechanics are listed separately and are not in this table.": "Berdasarkan order selesai (status Selesai), dikelompokkan menurut tanggal selesai. Pekerjaan = jumlah baris pekerjaan yang dikerjakan mekanik tersebut. Mekanik bergaji tetap didaftar terpisah dan tidak masuk tabel ini.", "Performance & payout ·": "Kinerja & upah ·", "Payout by month": "Upah per bulan", "Payout (68%)": "Upah (68%)", "Jobs finished": "Pekerjaan selesai", "Service revenue": "Pendapatan jasa", "Revenue after 2% tax": "Pendapatan setelah pajak 2%", "Covered?": "Tertutup?", "Fixed salary mechanics ·": "Mekanik gaji tetap ·", "Fixed salary coverage ·": "Cakupan gaji tetap ·", "✓ Covered · surplus": "✓ Tertutup · surplus", "✗ Short by": "✗ Kurang", "Does the mechanic's service revenue (after the 2% tax, the rest goes to the store) cover his fixed salary?": "Apakah pendapatan jasa mekanik (setelah pajak 2%, sisanya masuk ke toko) menutup gaji tetapnya?", "Net to store (revenue after tax − fixed salaries)": "Bersih untuk toko (pendapatan setelah pajak − gaji tetap)", "After 2% tax": "Setelah pajak 2%", "→ store": "→ toko", "Daily Expense": "Pengeluaran Harian", "Monthly Expense": "Pengeluaran Bulanan", "Add daily expense": "Tambah pengeluaran harian", "Add monthly expense ·": "Tambah pengeluaran bulanan ·", "+ Add expense": "+ Tambah pengeluaran", "+ Add monthly expense": "+ Tambah pengeluaran bulanan", "Expense (e.g. Listrik, Makan siang, Beli sapu)": "Pengeluaran (mis. Listrik, Makan siang, Beli sapu)", "Expense (e.g. Sewa toko, Listrik, Internet)": "Pengeluaran (mis. Sewa toko, Listrik, Internet)", "Expense list": "Daftar pengeluaran", "Expenses": "Pengeluaran", "Expenses ·": "Pengeluaran ·", "Expenses by month": "Pengeluaran per bulan", "Monthly expense list ·": "Daftar pengeluaran bulanan ·", "Saved expense types": "Jenis pengeluaran tersimpan", "Saved expenses (pick to auto-fill name and cost)": "Pengeluaran tersimpan (pilih untuk mengisi nama dan biaya otomatis)", "Saved monthly expenses (pick to auto-fill name and cost)": "Pengeluaran bulanan tersimpan (pilih untuk mengisi nama dan biaya otomatis)", "Every expense you add is remembered here with its latest cost. Edit the name or cost, or delete the ones you do not need.": "Setiap pengeluaran yang Anda tambahkan diingat di sini beserta biaya terbarunya. Ubah nama atau biayanya, atau hapus yang tidak diperlukan.", "Bills that come once a month (rent, electricity, internet…). They are counted in this month's expenses and reduce the profit on Profit Monthly.": "Tagihan yang datang sebulan sekali (sewa, listrik, internet…). Dihitung sebagai pengeluaran bulan ini dan mengurangi laba di Laba Bulanan.", "Copy from previous month": "Salin dari bulan sebelumnya", "Nothing saved yet. Add an expense and it will appear here.": "Belum ada yang tersimpan. Tambahkan pengeluaran dan akan muncul di sini.", "No expenses this month.": "Tidak ada pengeluaran bulan ini.", "No monthly expenses this month.": "Tidak ada pengeluaran bulanan bulan ini.", "No monthly expenses in": "Tidak ada pengeluaran bulanan di", "Everything from": "Semua dari", "is already in this month.": "sudah ada di bulan ini.", "Delete this expense?": "Hapus pengeluaran ini?", "Delete this monthly expense?": "Hapus pengeluaran bulanan ini?", "Write the expense name.": "Tulis nama pengeluaran.", "Enter the amount.": "Masukkan jumlah.", "Total monthly expenses": "Total pengeluaran bulanan", "Mechanic salary": "Gaji mekanik", "Mechanic salary ·": "Gaji mekanik ·", "Other workers salary": "Gaji pekerja lain", "Other workers salary ·": "Gaji pekerja lain ·", "Salary summary ·": "Ringkasan gaji ·", "Total salary": "Total gaji", "TOTAL SALARY TO PAY": "TOTAL GAJI YANG DIBAYAR", "Mechanic salary = 68% of the service price on finished orders. Overhaul engine jobs add 80% on top for any mechanic. A mechanic with a fixed salary gets only the fixed amount, with no 68% payout; his service revenue goes to the store after the 2% tax. Set fixed salaries and add or remove mechanics on the Mechanics tab.": "Gaji mekanik = 68% dari harga jasa pada order selesai. Pekerjaan overhaul mesin menambah 80% untuk mekanik mana pun. Mekanik bergaji tetap hanya menerima jumlah tetap, tanpa pembagian 68%; pendapatan jasanya masuk ke toko setelah pajak 2%. Atur gaji tetap serta tambah atau hapus mekanik di tab Mekanik.", "Advance notes ·": "Catatan kasbon ·", "Advances are only a note. They are taken from the worker's salary, not from store profit.": "Kasbon hanya sebagai catatan. Kasbon dipotong dari gaji pekerja, bukan dari laba toko.", "+ Add advance": "+ Tambah kasbon", "− Salary advance": "− Kasbon gaji", "Total open advances": "Total kasbon terbuka", "No advances this month.": "Tidak ada kasbon bulan ini.", "Note: worker takes salary advance": "Catatan: pekerja mengambil kasbon gaji", "Not yet deducted from salary": "Belum dipotong dari gaji", "· deducted": "· dipotong", "e.g. Kasbon for school fees": "mis. Kasbon untuk uang sekolah", "Additional income ·": "Pendapatan tambahan ·", "Additional income list ·": "Daftar pendapatan tambahan ·", "Extra income": "Pendapatan tambahan", "+ Add additional income": "+ Tambah pendapatan tambahan", "Total additional income": "Total pendapatan tambahan", "No additional income this month.": "Tidak ada pendapatan tambahan bulan ini.", "Bonus or extra pay for a worker (mechanic or other worker). It is added to the worker's total salary for the month and counted as a store cost on the Profit tab. You can edit or delete every entry.": "Bonus atau upah tambahan untuk pekerja (mekanik atau pekerja lain). Ditambahkan ke total gaji pekerja bulan itu dan dihitung sebagai biaya toko di tab Laba. Setiap entri bisa diubah atau dihapus.", "Delete this extra income?": "Hapus pendapatan tambahan ini?", "Select the worker.": "Pilih pekerja.", "e.g. Bonus, overtime": "mis. Bonus, lembur", "Other workers": "Pekerja lain", "Other workers (front desk, partman, etc.)": "Pekerja lain (front desk, partman, dll.)", "Worker name (e.g. Front desk, Partman)": "Nama pekerja (mis. Front desk, Partman)", "+ Add worker": "+ Tambah pekerja", "e.g. Front desk": "mis. Front desk", "Role / position (optional)": "Jabatan / posisi (opsional)", "No other workers yet. Press \"+ Add worker\".": "Belum ada pekerja lain. Tekan \"+ Tambah pekerja\".", "Fixed monthly salary. Removing a worker keeps their past advance notes.": "Gaji tetap bulanan. Menghapus pekerja tidak menghapus catatan kasbon sebelumnya.", "Monthly salary (Rp)": "Gaji bulanan (Rp)", "Fixed Salary": "Gaji Tetap", "Fixed salary": "Gaji tetap", "Fixed monthly salary (Rp)": "Gaji tetap bulanan (Rp)", "Mechanic name": "Nama mekanik", "+ Add mechanic": "+ Tambah mekanik", "Keep at least one mechanic": "Sisakan minimal satu mekanik", "New motor type": "Jenis motor baru", "Fixed salary is optional. A mechanic with a fixed salary is paid only that amount every month, with no 68% payout; his service revenue goes to the store after the 2% tax (the Salary and Mechanic Monthly tabs show whether it covers the salary). Leave it empty for mechanics who only get the 68%. Renaming updates saved orders too. Removing a mechanic keeps their past orders and monthly payout history.": "Gaji tetap bersifat opsional. Mekanik bergaji tetap hanya dibayar sejumlah itu setiap bulan, tanpa pembagian 68%; pendapatan jasanya masuk ke toko setelah pajak 2% (tab Gaji dan Mekanik Bulanan menunjukkan apakah cukup menutup gajinya). Kosongkan untuk mekanik yang hanya mendapat 68%. Mengganti nama juga memperbarui order tersimpan. Menghapus mekanik tidak menghapus order dan riwayat upah bulanannya.", "These mechanics do not get the 68% payout. Their service revenue, after the 2% tax, goes to the store to cover their fixed salary.": "Mekanik ini tidak mendapat bagian 68%. Pendapatan jasa mereka, setelah pajak 2%, masuk ke toko untuk menutup gaji tetap mereka.", "Jenis Motor (motor types)": "Jenis Motor", "+ Add motor type": "+ Tambah jenis motor", "+ Add new type…": "+ Tambah jenis baru…", "Type name, then press Enter": "Ketik nama, lalu tekan Enter", "Custom (type your own)…": "Kustom (ketik sendiri)…", "Renaming a type also updates saved orders that use it.": "Mengganti nama jenis juga memperbarui order tersimpan yang memakainya.", "Delete this motor type? Saved orders keep their text.": "Hapus jenis motor ini? Order tersimpan tetap memakai tulisannya.", "? Past orders keep their name.": "? Order lama tetap memakai namanya.", "No vehicles yet.": "Belum ada kendaraan.", "Tax & Reorder ·": "Pajak & Restok ·", "Tax & reorder by month": "Pajak & restok per bulan", "Tax (2%)": "Pajak (2%)", "Total Reorder Cost": "Total Biaya Restok", "TOTAL REORDER COST": "TOTAL BIAYA RESTOK", "Total reorder cost": "Total biaya restok", "Spareparts to reorder ·": "Sparepart untuk direstok ·", "No spareparts used this month.": "Tidak ada sparepart terpakai bulan ini.", "Tax is 2% of the service price on finished orders (status Done) and of overhaul engine jobs, Reorder cost is the part of sparepart prices (price − profit) to be spent on restocking, on the same finished jobs. Grouped by finish date.": "Pajak adalah 2% dari harga jasa pada order selesai (status Selesai) dan pekerjaan overhaul mesin. Biaya restok adalah bagian harga sparepart (harga − profit) yang dipakai untuk belanja stok ulang, pada pekerjaan selesai yang sama. Dikelompokkan menurut tanggal selesai.", "Cloud sync (GitHub)": "Sinkronisasi cloud (GitHub)", "GitHub token": "Token GitHub", "Last sync": "Sinkron terakhir", "Cloud copy": "Salinan cloud", "Connected as": "Terhubung sebagai", "⟳ Sync now": "⟳ Sinkron sekarang", "⬆ Force upload": "⬆ Paksa unggah", "⬇ Force download": "⬇ Paksa unduh", "Sync automatically after changes": "Sinkron otomatis setelah ada perubahan", "Keeps your data the same on every phone and computer. It is stored in a": "Menjaga data Anda tetap sama di setiap ponsel dan komputer. Disimpan di", "private Gist in your own GitHub account": "Gist privat di akun GitHub Anda sendiri", ", never in the public repository. The app keeps working offline and syncs when you are back online.": ", tidak pernah di repositori publik. Aplikasi tetap berfungsi offline dan menyinkronkan saat Anda kembali online.", "On GitHub open Settings → Developer settings → Personal access tokens →": "Di GitHub buka Settings → Developer settings → Personal access tokens →", "Generate a new token, tick only the": "Buat token baru, centang hanya", "scope, and copy it.": "lalu salin.", "Paste it above and press Connect. Repeat on your other devices with the same token.": "Tempel di atas lalu tekan Hubungkan. Ulangi di perangkat lain dengan token yang sama.", "The token is kept only in this browser. Do not share it.": "Token hanya disimpan di browser ini. Jangan dibagikan.", "Paste the token first.": "Tempel token terlebih dahulu.", "Paste your token first.": "Tempel token Anda terlebih dahulu.", "Checking token…": "Memeriksa token…", "Checking…": "Memeriksa…", "Syncing…": "Menyinkronkan…", "Sync failed": "Sinkron gagal", "Sync failed:": "Sinkron gagal:", "Sync cancelled. Nothing was changed.": "Sinkron dibatalkan. Tidak ada yang diubah.", "Conflict: this device and the cloud both changed. Open the Sync tab and press Sync now.": "Konflik: perangkat ini dan cloud sama-sama berubah. Buka tab Sinkron lalu tekan Sinkron sekarang.", "Both this device and the cloud have changes.": "Perangkat ini dan cloud sama-sama memiliki perubahan.", "OK = keep THIS device's data (overwrites cloud)": "OK = pakai data perangkat INI (menimpa cloud)", "Cancel = more options": "Batal = opsi lainnya", "Use the CLOUD data instead? This replaces the data on this device.": "Pakai data CLOUD saja? Ini akan mengganti data di perangkat ini.", "Overwrite the cloud copy with this device's data?": "Timpa salinan cloud dengan data perangkat ini?", "Overwrite this device's data with the cloud copy?": "Timpa data perangkat ini dengan salinan cloud?", "Disconnect this device from cloud sync? Your data stays on this device and in the cloud.": "Putuskan perangkat ini dari sinkronisasi cloud? Data Anda tetap ada di perangkat ini dan di cloud.", "Cloud backup created (": "Cadangan cloud dibuat (", "Could not download cloud data": "Tidak bisa mengunduh data cloud", "Cloud file is missing from the gist": "File cloud tidak ada di gist", "No cloud copy exists yet": "Belum ada salinan cloud", "Downloaded (": "Diunduh (", "Downloaded cloud data (": "Data cloud diunduh (", "Downloaded newer data (": "Data yang lebih baru diunduh (", "Uploaded (": "Diunggah (", "Uploaded changes (": "Perubahan diunggah (", "Uploaded this device's data (": "Data perangkat ini diunggah (", "Up to date (": "Sudah terbaru (", "Token rejected.": "Token ditolak.", "Token rejected. Make sure it is a classic token with the gist scope.": "Token ditolak. Pastikan ini token classic dengan scope gist.", "GitHub error": "Error GitHub", "GitHub refused the request (": "GitHub menolak permintaan (", "rate limit or missing permission": "batas permintaan atau izin kurang", "Not found (does the token have the gist scope?)": "Tidak ditemukan (apakah token punya scope gist?)", "Could not connect:": "Tidak bisa terhubung:", "Backup file": "File cadangan", "⬇ Download backup (.json)": "⬇ Unduh cadangan (.json)", "⬆ Restore backup": "⬆ Pulihkan cadangan", "Backup restored.": "Cadangan berhasil dipulihkan.", "Restore failed:": "Pemulihan gagal:", "Replace all current data with this backup?": "Ganti semua data saat ini dengan cadangan ini?", "Replace all current data with this file?": "Ganti semua data saat ini dengan file ini?", "not a backup from this app": "bukan cadangan dari aplikasi ini", "Use this to move data from an older copy of the app. Excel export and import are on the History tab.": "Gunakan ini untuk memindahkan data dari salinan aplikasi yang lebih lama. Ekspor dan impor Excel ada di tab Riwayat.", "Could not save on this device (storage full or blocked). Export a backup.": "Tidak bisa menyimpan di perangkat ini (penyimpanan penuh atau diblokir). Ekspor cadangan.", "⬇ Export": "⬇ Ekspor", "⬇ Export to Excel": "⬇ Ekspor ke Excel", "⬆ Import from Excel": "⬆ Impor dari Excel", "Import failed:": "Impor gagal:", "Reading file…": "Membaca file…", "The file is empty.": "File kosong.", "No data found. Use a file exported from this app.": "Data tidak ditemukan. Gunakan file hasil ekspor dari aplikasi ini.", "Export has all data plus a summary and monthly report. Import replaces all current services, spareparts and orders, so export first as a backup.": "Ekspor berisi semua data beserta ringkasan dan laporan bulanan. Impor menggantikan semua jasa, sparepart, dan order saat ini, jadi ekspor dulu sebagai cadangan.", "Excel library could not load. Check your internet connection.": "Library Excel tidak bisa dimuat. Periksa koneksi internet Anda.", "Excel library could not load, exported": "Library Excel tidak bisa dimuat, diekspor", "spareparts as CSV instead.": "sparepart sebagai CSV.", "spareparts to CSV.": "sparepart ke CSV.", "spareparts to Excel.": "sparepart ke Excel.", "No spareparts to export for this month.": "Tidak ada sparepart untuk diekspor bulan ini.", "No spareparts to export.": "Tidak ada sparepart untuk diekspor.", "added,": "ditambahkan,", "updated. Total": "diperbarui. Total", "Select a mechanic": "Pilih mekanik", "Connect to the main app": "Hubungkan ke aplikasi utama", "Paste the": "Tempel", "same GitHub token": "token GitHub yang sama", "used in the main app's Sync tab. Everything typed here goes straight to the main app.": "yang dipakai di tab Sinkron aplikasi utama. Semua yang diketik di sini langsung masuk ke aplikasi utama.", "Offline or cannot reach the main app:": "Offline atau tidak bisa menjangkau aplikasi utama:", "Main app data not found. Open the main app, connect Sync first.": "Data aplikasi utama tidak ditemukan. Buka aplikasi utama, hubungkan Sinkron terlebih dahulu.", "Main app data not found. In the main app open Sync and press Sync now first.": "Data aplikasi utama tidak ditemukan. Di aplikasi utama buka Sinkron dan tekan Sinkron sekarang terlebih dahulu.", "Disconnect this device from the main app?": "Putuskan perangkat ini dari aplikasi utama?", "Send to workshop": "Kirim ke bengkel", "Send overhaul to workshop": "Kirim overhaul ke bengkel", "Sent to the main app:": "Terkirim ke aplikasi utama:", "Overhaul sent to the main app:": "Overhaul dikirim ke aplikasi utama:", "Waiting to send…": "Menunggu pengiriman…", "Add at least one work, sparepart or note.": "Tambahkan minimal satu pekerjaan, sparepart, atau catatan.", "The total is an estimate. The cashier checks and finishes the job in the main app.": "Total ini hanya perkiraan. Kasir memeriksa dan menyelesaikan pekerjaan di aplikasi utama.", "The total is an estimate. The cashier checks and finishes the order in the main app.": "Total ini hanya perkiraan. Kasir memeriksa dan menyelesaikan order di aplikasi utama.", "⟳ Refresh": "⟳ Muat ulang", "Already in the list:": "Sudah ada di daftar:", "parts added": "sparepart ditambahkan", "items ·": "item ·", "Scan barcode": "Scan barcode", "Scan again": "Scan lagi", "Saved:": "Tersimpan:", "Point the camera at the sparepart barcode.": "Arahkan kamera ke barcode sparepart.", "Starting camera…": "Memulai kamera…", "Camera not available (needs HTTPS and camera permission). Type the SKU below.": "Kamera tidak tersedia (perlu HTTPS dan izin kamera). Ketik SKU di bawah.", "Camera could not open (": "Kamera tidak bisa dibuka (", "Keeps your data": "Menjaga data Anda", "＋ Expand": "＋ Buka", "－ Minimize": "－ Ciutkan", "Confirm": "Konfirmasi", "Edit": "Ubah", "Edited": "Diubah", "Delete": "Hapus", "Add": "Tambah", "TOTAL TAX (2%)": "TOTAL PAJAK (2%)", "Add package": "Tambah paket", "Add service fee": "Tambah biaya jasa", "Add sparepart": "Tambah sparepart", "Show more (": "Tampilkan lebih banyak (", "Enter the plate number (or NON DS).": "Masukkan nomor polisi (atau NON DS).", "Or type / scan SKU then Enter": "Atau ketik / scan SKU lalu Enter", "Allow camera access, or type the SKU below.": "Izinkan akses kamera, atau ketik SKU di kolom bawah.", "(includes additional income)": "(termasuk pendapatan tambahan)", "e.g. Kampas rem depan, Rantai": "mis. Kampas rem depan, Rantai", "e.g. Loyal customer, Promo Oktober": "mis. Pelanggan setia, Promo Oktober", "e.g. engine noise, brake soft": "mis. mesin berisik, rem kurang pakem", "− Daily expenses": "− Pengeluaran harian", "− Monthly expenses": "− Pengeluaran bulanan", "📷 Scan sparepart barcode": "📷 Scan barcode sparepart", "📷 Scan barcode sparepart": "📷 Scan barcode sparepart", "Export cancelled.": "Ekspor dibatalkan.", "Export failed:": "Ekspor gagal:", "Export done.": "Ekspor selesai.", "Imported": "Diimpor", "unknown": "tidak diketahui","LCR":"LCR","LCR job":"Pekerjaan LCR","Add LCR job":"Tambah pekerjaan LCR","LCR jobs":"Pekerjaan LCR","Job type":"Jenis pekerjaan","Mileage (KM)":"Kilometer (KM)","Frame number":"Nomor rangka","Voucher number":"Nomor voucher","Work status":"Status pekerjaan","Working":"Dikerjakan","Treatment":"Treatment","Ganti Rangka":"Ganti Rangka","Send LCR to workshop":"Kirim LCR ke bengkel","LCR sent to the main app:":"LCR dikirim ke aplikasi utama:","Enter the plate number.":"Isi nomor polisi.","Select the motor type.":"Pilih jenis motor.","Select the worker (only Order status can be saved without a worker).":"Pilih pekerja (hanya status Order yang boleh dikirim tanpa pekerja).","This voucher number is already used by another LCR job.":"Nomor voucher ini sudah dipakai pekerjaan LCR lain.","No LCR motor types yet. Ask the owner to add them in the main app.":"Belum ada jenis motor LCR. Minta pemilik menambahkannya di aplikasi utama.","No LCR jobs yet.":"Belum ada pekerjaan LCR.","Only the vehicle and the job are recorded here. Everything else is handled by the owner in the main app.":"Di sini hanya mencatat kendaraan dan pekerjaannya. Selebihnya diurus pemilik di aplikasi utama."},PHK=["LCR sent to the main app:","Motor Types", "Mechanic Monthly", "Profit Monthly", "Tax & Reorder Monthly", "History (", "Today's Queue", "Process (", "Spareparts (", "New Spareparts (", "Enter PIN", "Create a PIN", "Change PIN", "Save PIN", "Choose 4–8 digits to protect this app on this device.", "Confirm PIN", "Confirm new PIN", "Current PIN", "New PIN", "Enter your 4–8 digit PIN.", "The PIN must be 4–8 digits.", "The new PIN must be 4–8 digits.", "The new PINs do not match.", "The two PINs do not match.", "Wrong PIN.", "PIN changed.", "Too many wrong attempts. Try again in 30s.", "🔒 Lock", "🔒 Locked · only the owner can change this", "This app needs JavaScript enabled.", "Done", "Done:", "Address (optional)", "Failed:", "Working…", "Preparing…", "Not found.", "Nothing found", "No match", "No date", "Already exists", "Waiting", "In Progress", "Waiting for Parts", "DELAYED", "Out of stock", "Customer short of money", "Spareparts only (customer just buys parts, no service)", "Plate Number", "Plate number", "Queue no.", "Start date", "Finish date", "Finish date (actual)", "Estimated finish (due)", "Customer name", "Phone number", "Engine number", "Engine number (auto for NON DS)", "Engine number (only for NON DS — leave empty and it is made automatically)", "Customer address", "Motor type", "Select motor…", "List of Work", "Service type (search)", "Work description", "Service price", "— Select mechanic —", "— Select worker —", "— Pick saved expense —", "+ Add work", "Part (search)", "Reorder cost", "Reorder Cost", "+ Add sparepart", "Amount (Rp)", "Percent (%)", "Discount name (optional)", "Applied to service + spareparts. The mechanic payout and tax stay the same; the store absorbs the discount.", "Note for next visit", "What needs to be changed", "+ Add note", "Sparepart or work this motorcycle still needs (out of stock, or customer can't pay now). It will pop up the next time this plate number is entered.", "⚠ Note for this motorcycle (", "Save order", "Clear form?", "Add at least one sparepart", "Enter plate number", "Enter the plate number first.", "Write what needs to be changed.", "Delete this note?", "Select a mechanic for every work line (only Waiting status can be saved without a mechanic)", "Select a mechanic for every work line first (open the order and edit it).", "Select the mechanic (only Waiting status can be saved without a mechanic).", "Select a mechanic for this overhaul job first.", "Mechanic on this work order", "Service price total", "Mechanic payout (68% of service)", "(fixed salary · no 68%, revenue to store after 2% tax)", "Total mechanic payout", "Sparepart price", "Sparepart profit", "Customer total", "Service + spareparts", "TOTAL TO PAY", "Store & tax", "Store share of service (30%)", "+ Revenue of fixed-salary mechanics (after 2% tax)", "+ Sparepart profit", "(paid by store)", "STORE PROFIT", "TAX (2% of service)", "Service types & prices", "+ Add service type", "Search services…", "Service name", "Service price (Rp)", "Sell price", "No sparepart found.", "No spareparts found.", "Show 50 more", "Package name", "Search SKU or name…", "Search part…", "Search or pick…", "⬆ Import many (CSV / Excel)", "⬇ Export (Excel)", "⬇ Export (CSV)", "Columns: SKU, Name, QTY (stock, default 0), Price, Profit, Jasa wo/s, Jasa w/s (the last two are optional). Existing SKUs are updated, new SKUs are added; nothing is deleted.", "Reorder cost = sell price − profit (the part of the price set aside to buy stock again). QTY = stock; a part with QTY 0 can still be added to a Work Order or Overhaul, and the stock is reduced by the quantity used but never goes below 0. Jasa wo/s / w/s = replacement labor fee recommended in Work Order when this part is added. The list shows 50 spareparts at a time to keep the app fast; use the search to find any part.", "Entered by the front desk. Fill in the", "(and QTY). When the profit is above 0 the part moves to Spareparts automatically, or press \"Move to Spareparts\".", "✓ Move to Spareparts", "Move to Spareparts", "A package is a bundle of spareparts (for example V-Belt). In Work Order and Overhaul, choose", "next to + Add sparepart and every item is added at once, with its own price, profit and stock. Items are matched by SKU.", "+ New package", "New package", "+ Add item", "Package price:", "No package found", "No package found.", "This package has no items yet.", "This package has no items yet. Add the SKUs in the Spareparts tab.", "✕ Delete package", "Delete package", "Search package, SKU or part name…", "📦 Add package…", "📦 Add package (search)…", "+ Add sparepart (search)…", "No items yet.", "Spareparts (optional)", "Spareparts are added to the customer total. The sparepart profit goes to the store; there is no mechanic share or tax on parts.", "Price not set yet · can be entered once", "Not in list yet (created with Rp 0 when used)", "Enter it once. After saving, the sell price and service fees are locked. If there is a mistake, ask the owner to change it in the main app.", "Ask the cashier to add it in the main app.", "Service fee to replace", "is already in the list and its price is locked. Ask the owner to change it.", "is not in the sparepart list.", "new from front desk", "· new, will be sent with this order", "· not in parts list:", "Enter the SKU.", "Enter the name.", "Enter the sell price.", "After saving, only the owner can change these. Save?", "Open the Spareparts tab and fill in the Profit first.", "Cannot set this job to Done / Finish.", "These spareparts still have 0 profit:", "These SKUs were not in your Spareparts list, so they were created with price Rp 0:", "Open the Spareparts tab and fill in name, price and profit.", "All saved orders", "Minimize all days", "Expand all days", "Search plate, motor, date, mechanic, service, sparepart…", "Search history", "No orders match your search.", "No saved orders yet.", "Service orders & overhaul", "Spareparts only (walk-in)", "Store profit", "Store profit ·", "Process log (use it for delays, waiting for parts, next steps)", "+ Add process note", "What was done / why delayed", "Last note (", "What is it for?", "What was it for?", "No open jobs. On the Work Order tab (or the Overhaul tab) set the status to Waiting, In Progress or Waiting for Parts, then save the job to track it here over several days.", "Complaint / message for the mechanic (optional)", "Message for the mechanic (optional)", "Description (optional)", "Note (optional)", "Engine overhaul", "Overhaul engine job", "Add overhaul engine job", "+ Add overhaul job", "Overhaul price (Rp)", "Service type (98% store)", "Customer total (overhaul + service + parts)", "Total overhaul price", "Total price", "Overhaul price: 80% to the mechanic (extra income on top of his salary), 18% to the store, 2% tax. Service type price: 98% to the store, 2% tax (no mechanic share).", "Enter the overhaul price or a service price.", "Delete this overhaul job?", "No overhaul jobs this month.", "Overhaul service (98%)", "+ Overhaul engine (18%)", "+ Overhaul service type (98%)", "Overhaul by month", "Overhaul engine ·", "Overhaul jobs ·", "Store (18%)", "Service (98% store)", "Service (30%)", "Mechanic (80%)", "Mechanic payout (80%)", "The mechanic's 80% is added to his total salary on the Salary tab (also for fixed-salary mechanics). The store's 18%, 98% of the service type price and the sparepart profit are added to Profit Monthly, and the 2% to Tax & Reorder Monthly.", "Store profit by month", "− Discounts (paid by store)", "− Expenses (daily + monthly)", "− Fixed mechanic salaries", "− Other workers salary", "− Worker extra income", "PROFIT STORE NOW", "Profit now", "Fixed-mech revenue", "Parts profit", "Profit store now = store profit − expenses (daily and monthly) − fixed mechanic salaries − other workers' salaries (front desk, partman, etc.). Store profit = 30% of service + the service revenue of fixed-salary mechanics after the 2% tax + 18% of overhaul engine jobs + 98% of overhaul-tab service type prices + sparepart profit − discount, on finished orders (status Done), grouped by finish date. Salaries are counted once for every month in the list.", "ALL MONTHS", "Based on finished orders (status Done), grouped by the finish date. Jobs = number of work lines done by that mechanic. Fixed salary mechanics are listed separately and are not in this table.", "Performance & payout ·", "Payout by month", "Payout (68%)", "Jobs finished", "Service revenue", "Revenue after 2% tax", "Fixed salary mechanics ·", "Fixed salary coverage ·", "✓ Covered · surplus", "✗ Short by", "Does the mechanic's service revenue (after the 2% tax, the rest goes to the store) cover his fixed salary?", "Net to store (revenue after tax − fixed salaries)", "After 2% tax", "→ store", "Daily Expense", "Monthly Expense", "Add daily expense", "Add monthly expense ·", "+ Add expense", "+ Add monthly expense", "Expense (e.g. Listrik, Makan siang, Beli sapu)", "Expense (e.g. Sewa toko, Listrik, Internet)", "Expense list", "Expenses ·", "Expenses by month", "Monthly expense list ·", "Saved expense types", "Saved expenses (pick to auto-fill name and cost)", "Saved monthly expenses (pick to auto-fill name and cost)", "Every expense you add is remembered here with its latest cost. Edit the name or cost, or delete the ones you do not need.", "Bills that come once a month (rent, electricity, internet…). They are counted in this month's expenses and reduce the profit on Profit Monthly.", "Copy from previous month", "Nothing saved yet. Add an expense and it will appear here.", "No expenses this month.", "No monthly expenses this month.", "No monthly expenses in", "Everything from", "is already in this month.", "Delete this expense?", "Delete this monthly expense?", "Write the expense name.", "Enter the amount.", "Total monthly expenses", "Mechanic salary", "Mechanic salary ·", "Other workers salary", "Other workers salary ·", "Salary summary ·", "Total salary", "TOTAL SALARY TO PAY", "Mechanic salary = 68% of the service price on finished orders. Overhaul engine jobs add 80% on top for any mechanic. A mechanic with a fixed salary gets only the fixed amount, with no 68% payout; his service revenue goes to the store after the 2% tax. Set fixed salaries and add or remove mechanics on the Mechanics tab.", "Advance notes ·", "Advances are only a note. They are taken from the worker's salary, not from store profit.", "+ Add advance", "− Salary advance", "Total open advances", "No advances this month.", "Note: worker takes salary advance", "Not yet deducted from salary", "· deducted", "e.g. Kasbon for school fees", "Additional income ·", "Additional income list ·", "Extra income", "+ Add additional income", "Total additional income", "No additional income this month.", "Bonus or extra pay for a worker (mechanic or other worker). It is added to the worker's total salary for the month and counted as a store cost on the Profit tab. You can edit or delete every entry.", "Delete this extra income?", "Select the worker.", "e.g. Bonus, overtime", "Other workers", "Other workers (front desk, partman, etc.)", "Worker name (e.g. Front desk, Partman)", "+ Add worker", "e.g. Front desk", "Role / position (optional)", "No other workers yet. Press \"+ Add worker\".", "Fixed monthly salary. Removing a worker keeps their past advance notes.", "Monthly salary (Rp)", "Fixed Salary", "Fixed salary", "Fixed monthly salary (Rp)", "Mechanic name", "+ Add mechanic", "Keep at least one mechanic", "New motor type", "Fixed salary is optional. A mechanic with a fixed salary is paid only that amount every month, with no 68% payout; his service revenue goes to the store after the 2% tax (the Salary and Mechanic Monthly tabs show whether it covers the salary). Leave it empty for mechanics who only get the 68%. Renaming updates saved orders too. Removing a mechanic keeps their past orders and monthly payout history.", "These mechanics do not get the 68% payout. Their service revenue, after the 2% tax, goes to the store to cover their fixed salary.", "Jenis Motor (motor types)", "+ Add motor type", "+ Add new type…", "Type name, then press Enter", "Custom (type your own)…", "Renaming a type also updates saved orders that use it.", "Delete this motor type? Saved orders keep their text.", "? Past orders keep their name.", "No vehicles yet.", "Tax & Reorder ·", "Tax & reorder by month", "Tax (2%)", "Total Reorder Cost", "TOTAL REORDER COST", "Total reorder cost", "Spareparts to reorder ·", "No spareparts used this month.", "Tax is 2% of the service price on finished orders (status Done) and of overhaul engine jobs, Reorder cost is the part of sparepart prices (price − profit) to be spent on restocking, on the same finished jobs. Grouped by finish date.", "Cloud sync (GitHub)", "GitHub token", "Last sync", "Cloud copy", "Connected as", "⟳ Sync now", "⬆ Force upload", "⬇ Force download", "Sync automatically after changes", "Keeps your data the same on every phone and computer. It is stored in a", "private Gist in your own GitHub account", ", never in the public repository. The app keeps working offline and syncs when you are back online.", "On GitHub open Settings → Developer settings → Personal access tokens →", "Generate a new token, tick only the", "scope, and copy it.", "Paste it above and press Connect. Repeat on your other devices with the same token.", "The token is kept only in this browser. Do not share it.", "Paste the token first.", "Paste your token first.", "Checking token…", "Checking…", "Syncing…", "Sync failed", "Sync failed:", "Sync cancelled. Nothing was changed.", "Conflict: this device and the cloud both changed. Open the Sync tab and press Sync now.", "Both this device and the cloud have changes.", "OK = keep THIS device's data (overwrites cloud)", "Cancel = more options", "Use the CLOUD data instead? This replaces the data on this device.", "Overwrite the cloud copy with this device's data?", "Overwrite this device's data with the cloud copy?", "Disconnect this device from cloud sync? Your data stays on this device and in the cloud.", "Cloud backup created (", "Could not download cloud data", "Cloud file is missing from the gist", "No cloud copy exists yet", "Downloaded (", "Downloaded cloud data (", "Downloaded newer data (", "Uploaded (", "Uploaded changes (", "Uploaded this device's data (", "Up to date (", "Token rejected.", "Token rejected. Make sure it is a classic token with the gist scope.", "GitHub error", "GitHub refused the request (", "rate limit or missing permission", "Not found (does the token have the gist scope?)", "Could not connect:", "Backup file", "⬇ Download backup (.json)", "⬆ Restore backup", "Backup restored.", "Restore failed:", "Replace all current data with this backup?", "Replace all current data with this file?", "not a backup from this app", "Use this to move data from an older copy of the app. Excel export and import are on the History tab.", "Could not save on this device (storage full or blocked). Export a backup.", "⬇ Export", "⬇ Export to Excel", "⬆ Import from Excel", "Import failed:", "Reading file…", "The file is empty.", "No data found. Use a file exported from this app.", "Export has all data plus a summary and monthly report. Import replaces all current services, spareparts and orders, so export first as a backup.", "Excel library could not load. Check your internet connection.", "Excel library could not load, exported", "spareparts as CSV instead.", "spareparts to CSV.", "spareparts to Excel.", "No spareparts to export for this month.", "No spareparts to export.", "added,", "updated. Total", "Select a mechanic", "Connect to the main app", "Paste the", "same GitHub token", "used in the main app's Sync tab. Everything typed here goes straight to the main app.", "Offline or cannot reach the main app:", "Main app data not found. Open the main app, connect Sync first.", "Main app data not found. In the main app open Sync and press Sync now first.", "Disconnect this device from the main app?", "Send to workshop", "Send overhaul to workshop", "Sent to the main app:", "Overhaul sent to the main app:", "Waiting to send…", "Add at least one work, sparepart or note.", "The total is an estimate. The cashier checks and finishes the job in the main app.", "The total is an estimate. The cashier checks and finishes the order in the main app.", "⟳ Refresh", "Already in the list:", "parts added", "items ·", "Scan again", "Saved:", "Point the camera at the sparepart barcode.", "Starting camera…", "Camera not available (needs HTTPS and camera permission). Type the SKU below.", "Camera could not open (", "Keeps your data", "＋ Expand", "－ Minimize", "TOTAL TAX (2%)", "Add package", "Add service fee", "Add sparepart", "Show more (", "Enter the plate number (or NON DS).", "Or type / scan SKU then Enter", "Allow camera access, or type the SKU below.", "(includes additional income)", "e.g. Kampas rem depan, Rantai", "e.g. Loyal customer, Promo Oktober", "e.g. engine noise, brake soft", "− Daily expenses", "− Monthly expenses", "📷 Scan sparepart barcode", "Export cancelled.", "Export failed:", "Export done."],DOT={"Started": "Dimulai", "finished": "selesai", "due": "jatuh tempo", "store": "toko", "tax": "pajak", "profit": "laba", "qty": "jml", "service": "jasa", "parts": "sparepart", "deducted": "dipotong", "Finish": "Selesai", "Stock:": "Stok:", "Day": "Hari ke-", "All": "Semua", "All vouchers": "Semua voucher", "Voucher waiting": "Voucher menunggu", "Voucher claimed": "Voucher diklaim", "LCR Treatment": "LCR Treatment", "LCR Ganti Rangka": "LCR Ganti Rangka", "No LCR jobs this month.": "Tidak ada pekerjaan LCR bulan ini.", "Claimed": "Sudah diklaim", "Engine": "Mesin", "Frame": "Rangka", "Voucher": "Voucher", "Order": "Order"};
+var RX=[
+ [/Too many wrong attempts\. Try again in (\d+)s\./g,"Terlalu banyak percobaan salah. Coba lagi dalam $1 detik."],
+ [/DELAYED (\d+) day\(s\)/g,"TERLAMBAT $1 hari"],
+ [/\bDay (\d+) of work/g,"Hari ke-$1 pekerjaan"],
+ [/Showing (\d+) of (\d+)/g,"Menampilkan $1 dari $2"],
+ [/(\d+) of (\d+) packages?/g,"$1 dari $2 paket"],
+ [/(\d+) packages?\b/g,"$1 paket"],
+ [/(\d+) spareparts?\b/g,"$1 sparepart"],
+ [/(\d+) transactions?\b/g,"$1 transaksi"],
+ [/(\d+) open\b/g,"$1 terbuka"],
+ [/(\d+) items\b/g,"$1 item"],
+ [/(\d+) parts added/g,"$1 sparepart ditambahkan"],
+ [/^Done: (\d+) added, (\d+) updated\. Total (\d+) spareparts\.$/,"Selesai: $1 ditambahkan, $2 diperbarui. Total $3 sparepart."],
+ [/^Exported (\d+) spareparts to (CSV|Excel)\./,"Diekspor: $1 sparepart ke $2."],
+ [/^Remove ([\s\S]+)\? Past orders keep their name\.$/,"Hapus $1? Order lama tetap memakai namanya."],
+ [/^Delete package ([\s\S]*)\?$/,"Hapus paket $1?"],
+ [/^(📦 [\s\S]*?) added\b/,"$1 ditambahkan"],
+ [/^✓ ([\s\S]*?) added$/,"✓ $1 ditambahkan"],
+ [/^✓ ([\s\S]*?) · qty (\d+)$/,"✓ $1 · jml $2"],
+ [/^SKU (\S+) scanned$/,"SKU $1 sudah discan"],
+ [/^Export failed: /,"Ekspor gagal: "],
+ [/^Save ([\s\S]+)\nSell price ([\s\S]+)\n\nAfter saving, only the owner can change these\. Save\?$/,"Simpan $1\nHarga jual $2\n\nSetelah disimpan, hanya pemilik yang bisa mengubahnya. Simpan?"],
+ [/\(service /g,"(jasa "],
+ [/\) of fixed salary/g,") dari gaji tetap"],
+ [/(\d+) left\)/g,"$1 lagi)"],
+ [/\bday (\d+)\b/g,"hari ke-$1"],
+ [/\bDay (\d+)\b/g,"Hari ke-$1"]
+];
+function esc(s){return s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")}
+var keys=PHK.slice().sort(function(a,b){return b.length-a.length});
+var PHre=keys.length?new RegExp("(^|[^A-Za-z0-9])("+keys.map(esc).join("|")+")(?![A-Za-z0-9])","g"):null;
+var PHre2=keys.length?new RegExp("(^|[^A-Za-z0-9])("+keys.filter(function(k){return !/[A-Za-z0-9]$/.test(k)}).map(esc).join("|")+")","g"):null;
+var dk=Object.keys(DOT).sort(function(a,b){return b.length-a.length});
+var DOTre=new RegExp("(^|[^A-Za-z0-9])("+dk.map(esc).join("|")+")(?![A-Za-z0-9])","g");
+function tr(core){
+ if(!core)return core;
+ if(Object.prototype.hasOwnProperty.call(EX,core))return EX[core];
+ var s=core,i;
+ for(i=0;i<RX.length;i++)s=s.replace(RX[i][0],RX[i][1]);
+ if(PHre)s=s.replace(PHre,function(m,p,k){return p+(EX[k]||k)});
+ if(PHre2)s=s.replace(PHre2,function(m,p,k){return p+(EX[k]||k)});
+ if(s.indexOf("·")>-1)s=s.replace(DOTre,function(m,p,k){return p+DOT[k]});
+ return s;
+}
+function trs(d){
+ var m=/^(\s*)([\s\S]*?)(\s*)$/.exec(d);
+ if(!m||!m[2])return d;
+ var r=tr(m[2]).replace(/Work Order/g,"PKB").replace(/WORK ORDER/g,"PKB").replace(/Overhaul/g,"Turmes").replace(/overhaul/g,"turmes").replace(/OVERHAUL/g,"TURMES").replace(/\b(Turmes|turmes|TURMES) mesin\b/gi,"$1");
+ return r===m[2]?d:m[1]+r+m[3];
+}
+globalThis.__tr=trs;
+if(typeof document==="undefined"||!document.documentElement)return;
+/* browser pieces */
+try{
+ var oa=window.alert,oc=window.confirm,op=window.prompt;
+ window.alert=function(m){return oa.call(window,trs(String(m)))};
+ window.confirm=function(m){return oc.call(window,trs(String(m)))};
+ window.prompt=function(m,d){return op.call(window,trs(String(m)),d)};
+ var ol=Date.prototype.toLocaleDateString;
+ Date.prototype.toLocaleDateString=function(l,o){return ol.call(this,(l==="en-GB"||l==="en-US"||l==="en")?"id-ID":l,o)};
+}catch(e){}
+var ATT=["placeholder","title","aria-label","alt"],SKIP={SCRIPT:1,STYLE:1,TEXTAREA:1,CODE:1};
+function doText(n){
+ var p=n.parentNode;
+ if(!p||SKIP[p.nodeName])return;
+ var d=n.data,r=trs(d);
+ if(r===d)return;
+ if(p.nodeName==="OPTION"&&!p.hasAttribute("value"))p.setAttribute("value",d.trim()===d?d:p.textContent);
+ n.data=r;
+}
+function doEl(e){
+ if(e.nodeType!==1)return;
+ for(var i=0;i<ATT.length;i++){var v=e.getAttribute(ATT[i]);if(v){var r=trs(v);if(r!==v)e.setAttribute(ATT[i],r)}}
+}
+function walk(root){
+ if(root.nodeType===3){doText(root);return}
+ if(root.nodeType!==1&&root.nodeType!==9&&root.nodeType!==11)return;
+ if(root.nodeType===1){if(SKIP[root.nodeName])return;doEl(root)}
+ var w=document.createTreeWalker(root,5,null),n;
+ while((n=w.nextNode())){if(n.nodeType===3)doText(n);else if(SKIP[n.nodeName]){}else doEl(n)}
+}
+var busy=false;
+var mo=new MutationObserver(function(recs){
+ if(busy)return;busy=true;
+ try{
+  for(var i=0;i<recs.length;i++){
+   var r=recs[i];
+   if(r.type==="childList"){for(var j=0;j<r.addedNodes.length;j++)walk(r.addedNodes[j])}
+   else if(r.type==="characterData")doText(r.target);
+   else if(r.type==="attributes")doEl(r.target);
+  }
+ }catch(e){}
+ mo.takeRecords();busy=false;
+});
+mo.observe(document.documentElement,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:ATT});
+function init(){busy=true;try{walk(document.documentElement);document.title=trs(document.title)}catch(e){}mo.takeRecords();busy=false}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init);else init();
+})();
+</script></head><body>
+<header class="hd"><div class="in"><div class="br"><span class="bdg">AHASS</span><div><div class="nm">Cenderawasih Motor 3</div><div class="sb">Front Desk</div></div></div>
+<div style="display:flex;gap:6px;align-items:center"><span class="sb" id="conn"></span><button class="btn" type="button" onclick="gear()">⚙</button></div></div></header>
+<main><div id="app"></div></main>
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const num=v=>parseFloat(v)||0,A=x=>Array.isArray(x)?x:[],T=v=>String(v==null?"":v);
+const rp=n=>"Rp "+Math.round(n||0).toLocaleString("id-ID");
+const today=()=>new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+const MAIN="work-order-data.json",INBOX="frontdesk-inbox.json",CK="fd_cfg",PK="fd_pending",LK="fd_lists2";
+const ld=(k,d)=>{try{return JSON.parse(localStorage.getItem(k)||"null")??d}catch(e){return d}},sv=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+const L0=()=>({services:[],parts:[],pkgs:[],mechs:[],motors:[],notes:[],plates:{},orders:[],lcrTypes:[],lcr:[],lcrV:[]});
+const PPK="fd_pp";let PPs=ld(PPK,[]),PQ="",PLim=50,NPF={sku:"",name:"",price:"",jd:"",jt:""},PE={};
+let C=ld(CK,{token:"",gid:""});if(C.token&&C.token!=="fb")C={token:"",gid:""};/* old GitHub token: sign in with Firebase instead */
+let L=Object.assign(L0(),ld(LK,{})),P=ld(PK,[]),tab="new",F=blank(),msg=null,online=false,busy=false,AF={},AF2={},OF=blankOF();
+function blank(){return{q:"",plate:"",eng:"",motor:"",cust:"",phone:"",addr:"",note:"",po:false,lines:[emptyLine()],pl:[],disc:0,discT:"rp",discN:"",notes:[],NT:{t:"",w:"Out of stock"}}}
+function blankOF(){return{q:"",plate:"",eng:"",motor:"",cust:"",phone:"",addr:"",name:"",price:"",mech:"",sid:"",sname:"",sprice:"",note:"",pl:[],sl:[],jl:[emptyLine()],notes:[],NT:{t:"",w:"Out of stock"}}}
+function emptyLine(m,sp){const l={id:uid(),sid:"",name:"",price:0,mech:m||"",pj:""};if(sp)l.sp=1;return l}
+
+/* ---- plate helpers (same rules as the main app) ---- */
+const pk=s=>String(s||"").toUpperCase().replace(/[^A-Z0-9]/g,""),isNP=p=>pk(p)==="NONDS",vk=(p,e)=>pk(p)+(isNP(p)?"|"+pk(e):"");
+const normSku=v=>String(v==null?"":v).toLowerCase().replace(/[^a-z0-9]/g,"");
+const part=id=>L.parts.find(p=>p.id===id),findSku=c=>{const k=normSku(c);return k?L.parts.find(p=>normSku(p.sku)===k)||null:null};
+const pLbl=l=>{const p=part(l.pid);return p?p.sku+" · "+p.name:""};
+
+/* ---- Firebase (same project as the main app) ---- */
+const jp=s=>{try{return JSON.parse(s)}catch(e){return null}};
+const FDC=["services","parts","pkgs","orders","ovh","lcr","lcrTypes","notes","meta"];
+function fbStart(){return FB.start(FDC,()=>{refresh()})}
+function fbMain(){const M=FB.M,me=M.meta&&M.meta.get("main");if(!me)return null;const x=jp(me.j)||{},d={mechs:x.mechs,motors:x.motors};
+ FDC.slice(0,8).forEach(c=>{d[c]=[...(M[c]||new Map()).values()].map(v=>{const r=jp(v.j);if(r&&c==="parts")r.stock=Number(v.stock)||0;return r}).filter(Boolean)});return d}
+
+/* Read-only copy of what the front desk needs. Profit, reorder cost, tax and mechanic pay are never copied. */
+async function refresh(){
+ if(!C.token||busy)return;
+
+ try{
+  await FB.init();if(!FB.user)throw new Error("Belum masuk.");await fbStart();
+  const d=fbMain();if(!d)throw new Error("Data aplikasi utama belum ada di cloud. Buka aplikasi utama lalu masuk dulu.");
+  {const td=today(),pl={};
+   [...A(d.orders),...A(d.ovh)].filter(x=>(x.cust||x.phone||x.addr)&&pk(x.plate).length>=3&&!(isNP(x.plate)&&!pk(x.eng))).forEach(x=>{const k=vk(x.plate,x.eng),o=pl[k];if(!o||T(x.date)>=o.d)pl[k]={d:T(x.date),c:T(x.cust),p:T(x.phone),a:T(x.addr),m:T(x.motor)}});
+   L={services:A(d.services).map(s=>({id:s.id,name:T(s.name),price:num(s.price),sp:s.sp?1:0})).sort((a,b)=>a.name.localeCompare(b.name)),
+      parts:A(d.parts).map(p=>({id:p.id,sku:T(p.sku),name:T(p.name),price:num(p.price),stock:Math.max(0,Math.floor(num(p.stock))),jd:num(p.jd),jt:num(p.jt)})),
+      pkgs:A(d.pkgs).map(k=>({id:k.id,name:T(k.name),jd:num(k.jd),jt:num(k.jt),items:A(k.items).map(i=>({sku:T(i.sku),qty:Math.max(1,num(i.qty)||1)}))})),
+      mechs:A(d.mechs).map(T).filter(Boolean).sort(),
+      motors:A(d.motors).map(T).sort(),
+      notes:A(d.notes).filter(n=>!n.done).map(n=>({id:n.id,plate:T(n.plate),eng:T(n.eng),motor:T(n.motor),text:T(n.text),why:T(n.why),date:T(n.date)})),
+      plates:pl,
+      lcrTypes:A(d.lcrTypes).map(t=>T(t&&t.name).trim()).filter(Boolean).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true,sensitivity:"base"})),
+      lcr:A(d.lcr).filter(e=>e).map(e=>({id:T(e.id),date:T(e.date).slice(0,10),done:T(e.done).slice(0,10),plate:T(e.plate),motor:T(e.motor),km:Math.max(0,Math.round(num(e.km))),eng:T(e.eng),frame:T(e.frame),cust:T(e.cust),phone:T(e.phone),lk:e.kind==="R"?"R":"T",status:T(e.status),mech:T(e.mech),vno:T(e.vno),vh:(T(e.vno)||num(e.vamt)>0)?1:0,vs:e.vstat==="Claimed"?"Claimed":"Waiting"})),
+      lcrV:A(d.lcr).map(e=>T(e&&e.vno)).filter(Boolean),
+      orders:A(d.orders).filter(o=>!o.po&&(o.date===td||(o.status&&o.status!=="Done"))).map(o=>({id:o.id,queue:o.queue,plate:o.plate,motor:o.motor,cust:o.cust,status:o.status||"Done",date:o.date})).concat(A(d.ovh).filter(o=>o.date===td||(o.status&&o.status!=="Done")).map(o=>({id:o.id,queue:o.queue,plate:o.plate,motor:o.motor,cust:o.cust,status:o.status||"Done",date:o.date,ov:1})))};
+  Object.keys(QX).forEach(k=>{const o=L.orders.find(x=>String(x.id)===k);if(!o||o.status!=="Waiting"||Date.now()-QX[k].t>18e5)delete QX[k]});sv(QXK,QX);
+   Object.keys(QO).forEach(k=>{const o=L.orders.find(x=>String(x.id)===k);if(!o||o.queue===QO[k].q||Date.now()-QO[k].t>18e5)delete QO[k]});sv(QOK,QO);applyPP();sv(LK,L)}
+  online=true;
+ }catch(e){online=false;if(!msg&&tab==="new")msg={t:"er",m:"Offline or cannot reach the main app: "+e.message}}
+ conn();softDraw();
+}
+/* parts typed here but not yet visible in the main data stay visible (and locked) until the main app has them */
+function applyPP(){
+ const cut=Date.now()-3*864e5,keep=[];
+ PPs.forEach(x=>{if(x.t<=cut)return;const m=L.parts.find(p=>p.id===x.id)||findSku(x.sku);
+  if(m){if(num(m.price)>0)return;Object.assign(m,{name:x.name,price:x.price,jd:x.jd,jt:x.jt})}
+  else L.parts.push({id:x.id,sku:x.sku,name:x.name,price:x.price,stock:0,jd:x.jd,jt:x.jt});
+  keep.push(x)});
+ PPs=keep;sv(PPK,PPs)}
+function softDraw(){const a=document.activeElement;if(a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName))return;draw()}
+function conn(){$("conn").innerHTML='<span class="dot '+(online?"on":"")+'"></span>'+(online?"Connected":"Offline")+(P.length?" · "+P.length+" pending":"")}
+
+/* Send: touches only the inbox file, never the main data. */
+async function flush(){
+ if(!P.length||!C.token||busy)return;busy=true;
+ const out=P.slice();let ok=false;/* only what we are sending now; anything typed meanwhile stays queued */
+ try{
+  await FB.init();if(!FB.user)throw new Error("Belum masuk.");
+  const r=await FB.commit(out.map(e=>({c:"inbox",id:e.id,d:{j:JSON.stringify(e),created:e.created||Date.now()}})));
+  if(r==="sent"){const done=new Set(out.map(e=>e.id));P=P.filter(e=>!done.has(e.id));sv(PK,P);online=true;ok=true}else online=false;/* "queued" = kept by Firebase while offline; retried below (same ids, so no duplicates) */
+ }catch(e){online=false}
+ finally{busy=false;conn()}
+ if(P.length)setTimeout(flush,ok?0:4000);
+}
+
+/* ---- totals (customer-facing only) ---- */
+function totals(){
+ const S=F.lines.reduce((a,l)=>a+(l.sp?0:num(l.price)),0),SS=F.lines.reduce((a,l)=>a+(l.sp?num(l.price):0),0);let pp=0;
+ F.pl.forEach(l=>{if(l.bx){pp+=num(l.bp)*Math.max(1,num(l.qty));return}const p=part(l.pid);if(p)pp+=p.price*l.qty});
+ const gross=S+SS+pp,dv=Math.max(0,num(F.disc)),disc=Math.min(gross,F.discT==="pct"?gross*Math.min(dv,100)/100:dv);
+ return{S,SS,pp,gross,disc,total:gross-disc};
+}
+function sumHTML(){const t=totals();
+ return `<div><span>Service + spareparts</span><b>${rp(t.S+t.SS+t.pp)}</b></div>${t.disc>0?`<div><span>− ${esc(F.discN||"Discount")}</span><b>− ${rp(t.disc)}</b></div>`:""}<div class="b"><span>TOTAL</span><span>${rp(t.total)}</span></div>`}
+function calc(){const e=$("sum");if(e)e.innerHTML=sumHTML()}
+
+/* ---- comboboxes ---- */
+const srcOf={
+ s:(ws)=>L.services.filter(s=>!s.sp&&ws.every(w=>s.name.toLowerCase().includes(w))).slice(0,50).map(s=>[s.id,(s.sp?"★ ":"")+esc(s.name)+' <span class="mu">'+rp(s.price)+"</span>"]),
+ p:(ws)=>L.parts.filter(p=>{const h=(p.sku+" "+p.name).toLowerCase();return ws.every(w=>h.includes(w))}).slice(0,40).map(p=>[p.id,esc(p.sku)+" · "+esc(p.name)+' <span class="mu">'+rp(p.price)+" · Stok "+p.stock+"</span>"]),
+ k:(ws)=>L.pkgs.filter(k=>{const h=(k.name+" "+k.items.map(i=>i.sku).join(" ")).toLowerCase();return ws.every(w=>h.includes(w))}).sort((x,y)=>(x.name||"Package").localeCompare(y.name||"Package",undefined,{sensitivity:"base",numeric:true})).slice(0,40).map(k=>[k.id,esc(k.name||"Package")+' <span class="mu">('+k.items.filter(i=>i.sku).length+" items)</span>"])
+};
+srcOf.z=(ws)=>L.services.filter(s=>s.sp&&ws.every(w=>s.name.toLowerCase().includes(w))).slice(0,50).map(s=>[s.id,"★ "+esc(s.name)+' <span class="mu">'+rp(s.price)+"</span>"]);
+srcOf.v=(ws)=>L.services.filter(s=>ws.every(w=>s.name.toLowerCase().includes(w))).slice(0,50).map(s=>[s.id,(s.sp?"★ ":"")+esc(s.name)+' <span class="mu">'+rp(s.price)+"</span>"]);srcOf.o=srcOf.p;srcOf.k2=srcOf.k;srcOf.zo=srcOf.z;srcOf.vo=srcOf.v;
+function cbOpen(inp,kind,id,all){
+ const ws=all?[]:inp.value.toLowerCase().trim().split(/\s+/).filter(Boolean),box=inp.nextElementSibling,m=srcOf[kind](ws);
+ box.innerHTML=m.length?m.map(x=>`<div onmousedown="event.preventDefault();cbPick('${kind}','${id}','${x[0]}')">${x[1]}</div>`).join(""):'<div class="none">Nothing found</div>';box.hidden=false}
+function cbClose(inp){inp.nextElementSibling.hidden=true;if(inp.dataset.clr)inp.value=""}
+const cbIn=(kind,id,val,ph,clr)=>`<div class="cb"><input class="cbi" type="search" autocomplete="off" value="${esc(val)}" placeholder="${ph}" ${clr?'data-clr="1"':""} onfocus="this.select();cbOpen(this,'${kind}','${id}',1)" oninput="cbOpen(this,'${kind}','${id}')" onblur="cbClose(this)"><div class="cbl" hidden></div></div>`;
+function cbPick(kind,id,val){const a=document.activeElement;if(a&&a.blur)a.blur();
+ if(kind==="s"||kind==="z"){const l=F.lines.find(x=>x.id===id),s=L.services.find(x=>x.id===val);if(l&&s){l.sid=s.id;l.name=s.name;l.price=s.price}keep(draw)}
+ else if(kind==="p"){const l=F.pl.find(x=>x.id===id);if(l){l.pid=val;delete l.pg;if(l.rj)dropRec(l)}keep(draw)}
+ else if(kind==="vo"){const l=OF.jl.find(x=>x.id===id),s=L.services.find(x=>x.id===val);if(l&&s){l.sid=s.id;l.name=s.name;l.price=s.price}keep(draw);calcO()}
+ else if(kind==="zo"){const l=OF.sl.find(x=>x.id===id),s=L.services.find(x=>x.id===val);if(l&&s){l.sid=s.id;l.name=s.name;l.price=s.price}keep(draw);calcO()}
+ else if(kind==="o"){const l=OF.pl.find(x=>x.id===id);if(l){if(l.rj)ovUndo(l);l.rd="";delete l.pk;delete l.pf;delete l.pg;l.pid=val}keep(draw)}
+ else if(kind==="k2")pkAdd(val,"v")
+ else pkAdd(val)}
+const keep=f=>{const y=scrollY;f();scrollTo(0,y)};
+
+/* ---- list of work ---- */
+function ln(id,k,v){const l=F.lines.find(x=>x.id===id);
+ if(k==="mech"&&F.lines.length>1&&F.lines.every(x=>!x.mech)){F.lines.forEach(x=>x.mech=v);keep(draw);return}
+ l[k]=v;if(k==="mech"){keep(draw);return}calc()}
+function setPO(v){F.po=!!v;if(v){F.lines=[emptyLine()];F.notes=[];F.eng="";F.motor="";F.note=""}keep(draw)}
+function addLine(sp){F.lines.push(emptyLine((F.lines.at(-1)||{}).mech,sp));keep(draw)}
+function rmLine(id){const x=F.lines.find(a=>a.id===id);if(x&&x.pj){const l=F.pl.find(q=>q.id===x.pj);if(l)l.rj=""}F.lines=F.lines.filter(a=>a.id!==id);if(!F.lines.length)F.lines.push(emptyLine());keep(draw)}
+
+/* ---- spareparts + packages + service-fee recommendation ---- */
+const JN={d:"tanpa servis",t:"dengan servis"},jfee=(p,k)=>p?num(k==="d"?p.jd:p.jt):0;
+const recSrc=l=>{if(l.pk)return{name:l.pk.n,jd:l.pk.jd,jt:l.pk.jt,pkg:1};const p=part(l.pid);return p?{name:p.name,jd:p.jd,jt:p.jt}:null};
+const pkHas=(l,Ls)=>!!(l&&l.pf&&(Ls||F.pl).some(x=>x.id===l.pf&&x.pk));
+function recHTML(l){
+ const p=recSrc(l);if(l.rd||!p||!(p.jd>0||p.jt>0)||pkHas(l)||l.rj)return"";
+ const op=k=>{const f=jfee(p,k);if(!(f>0))return"";return `<button type="button" class="btn opt${l.rj===k?" on":""}" onclick="setRec('${l.id}','${k}')"><b>Add service fee${p.pkg?"":" "+JN[k]}</b> · ${rp(f)}</button>`};
+ return `<div class="rec"><span class="rct">Service fee to replace ${p.pkg?"package ":""}<b>${esc(p.name)}</b>?</span><button type="button" class="btn rcx" onclick="closeRec('${l.id}')" aria-label="Close">✕</button><div class="opts">${op("d")}${p.pkg?"":op("t")}</div></div>`}
+/* package recommendation is shown after the LAST part of its package; per-part recommendations stay under their own row */
+/* baris sparepart dari paket digabung dalam 1 border */
+const pgGrp=(L,f)=>{let h="",o=false;L.forEach((l,i)=>{const g=!l.bx&&!!l.pg;if(g&&!o){h+='<div class="pkgrp">';o=true}else if(!g&&o){h+='</div>';o=false}h+=f(l,i)});return h+(o?'</div>':'')};
+function recAt(L,i,fn){
+ const l=L[i];if(!l)return"";let h="";
+ if(!l.pk)h+=fn(l);
+ L.forEach((c,ci)=>{if(!c.pk)return;let last=ci;L.forEach((x,xi)=>{if(x.pf===c.id&&xi>last)last=xi});if(last===i)h+=fn(c)});
+ return h}
+function closeRec(id){const l=F.pl.find(x=>x.id===id);if(l)l.rd=1;keep(draw)}
+function setRec(id,k){
+ const l=F.pl.find(x=>x.id===id),p=l&&recSrc(l);if(!p)return;
+ const i=F.lines.findIndex(x=>x.pj===id);
+ if(l.rj===k){if(i>=0)F.lines.splice(i,1);l.rj="";if(!F.lines.length)F.lines.push(emptyLine());keep(draw);return}
+ const f=jfee(p,k),nm="Jasa ganti "+(p.pkg?"paket ":"")+p.name+(p.pkg?"":" ("+JN[k]+")");
+ if(i>=0){F.lines[i].name=nm;F.lines[i].price=f}
+ else{const mech=(F.lines.at(-1)||{}).mech||"",b=F.lines.findIndex(x=>!x.sid&&!x.name&&!num(x.price)&&!x.pj),nl={id:uid(),sid:"",name:nm,price:f,mech,pj:id};
+  if(b>=0){nl.id=F.lines[b].id;nl.mech=F.lines[b].mech||mech;F.lines[b]=nl}else F.lines.push(nl)}
+ l.rj=k;keep(draw)}
+function dropRec(l){F.lines=F.lines.filter(x=>x.pj!==l.id);l.rj="";if(!F.lines.length)F.lines.push(emptyLine())}
+function pl_(id,k,v){const l=F.pl.find(x=>x.id===id);l[k]=v;if(k==="qty"){const p=part(l.pid),e=$("pp_"+id);if(p&&e)e.textContent=rp(p.price*l.qty);calc()}}
+function rmPl(id){const l=F.pl.find(x=>x.id===id);if(l&&l.rj)dropRec(l);F.pl=F.pl.filter(x=>x.id!==id);keep(draw)}
+/* ---- Sparepart Beli: dibeli dari toko tidak resmi, harga & laba diisi/diubah langsung oleh front desk ---- */
+const bxLive=l=>!!(l&&l.bx&&(T(l.bn).trim()||num(l.bp)>0||num(l.bl)>0));
+const bxOut=l=>({id:l.id,pid:"",bx:1,qty:Math.max(1,num(l.qty)||1),bn:T(l.bn).trim(),bp:Math.round(num(l.bp)),bl:Math.round(num(l.bl))});
+function bxCheck(a){for(const l of a){if(!bxLive(l))continue;const n=T(l.bn).trim();
+ if(!n)return "Isi nama sparepart beli.";
+ if(!(num(l.bp)>0))return "Isi harga untuk sparepart beli: "+n+".";
+ if(!(num(l.bl)>0))return "Isi laba untuk sparepart beli: "+n+" (laba tidak boleh 0).";
+ if(num(l.bl)>num(l.bp))return "Laba "+n+" tidak boleh lebih besar dari harga."}return ""}
+const bxArr=w=>w==="v"?OF.pl:F.pl;
+function addBeli(w){bxArr(w).push({id:uid(),pid:"",qty:1,bx:1,bn:"",bp:"",bl:""});keep(draw)}
+function rmBeli(w,id){const a=bxArr(w).filter(x=>x.id!==id);if(w==="v")OF.pl=a;else F.pl=a;keep(draw)}
+function bxSet(w,id,k,v){const l=bxArr(w).find(x=>x.id===id);if(!l)return;l[k]=v;
+ const e=$("bt_"+id);if(e)e.textContent=rp(num(l.bp)*Math.max(1,num(l.qty)));
+ if(w==="v")calcO();else calc()}
+function bxRow(l,w){const q=`bxSet('${w}','${l.id}'`;
+ return `<div class="row pl-b" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;align-items:end"><div style="grid-column:1/-1"><label>🛒 Sparepart beli (toko tidak resmi)</label><input value="${esc(l.bn)}" autocomplete="off" placeholder="Nama sparepart" oninput="${q},'bn',this.value)"></div>
+ <div><label>Jml</label><input type="number" min="1" value="${l.qty}" oninput="${q},'qty',Math.max(1,num(this.value)))"></div>
+ <div><label>Harga satuan</label><input type="number" inputmode="numeric" value="${esc(l.bp)}" placeholder="0" oninput="${q},'bp',this.value)"></div>
+ <div><label>Laba satuan</label><input type="number" inputmode="numeric" value="${esc(l.bl)}" placeholder="0" oninput="${q},'bl',this.value)"></div>
+ <div class="ro">Total<br><b id="bt_${l.id}">${rp(num(l.bp)*Math.max(1,num(l.qty)))}</b></div>
+ <button class="btn x" onclick="rmBeli('${w}','${l.id}')" aria-label="Hapus">✕</button></div>`}
+function addPlEmpty(){F.pl.push({id:uid(),pid:"",qty:1});keep(draw)}
+function pkAdd(id,w){
+ const PL=w==="v"?OF.pl:F.pl;
+ const k=L.pkgs.find(x=>x.id===id);if(!k)return;
+ const items=k.items.filter(i=>i.sku.trim());
+ if(!items.length){alert("This package has no items yet.");return}
+ const miss=[],res=[];items.forEach(i=>{const p=findSku(i.sku);if(p)res.push({p,qty:i.qty});else miss.push(i.sku)});
+ const got=[];
+ res.forEach(({p,qty})=>{let ex=PL.find(l=>l.pid===p.id);if(ex)ex.qty=Math.max(1,num(ex.qty))+qty;else{const e=PL.find(l=>!l.pid&&!l.bx);if(e){e.pid=p.id;e.qty=qty;e.pg=1;ex=e}else{ex={id:uid(),pid:p.id,qty,pg:1};PL.push(ex)}}got.push(ex)});
+ if(num(k.jd)>0||num(k.jt)>0){
+  if(!got.some(l=>l.pk&&l.pk.n===(k.name||"Package"))){const ld=got.find(l=>!l.pk&&!l.rj);
+   if(ld){ld.pk={n:k.name||"Package",jd:num(k.jd),jt:num(k.jt)};ld.rd=0;got.forEach(l=>{if(l!==ld&&!l.pk&&!l.rj)l.pf=ld.id})}}}
+ keep(draw);toast("📦 "+(k.name||"Package")+" added"+(miss.length?" · not in parts list: "+miss.join(", "):""));
+}
+
+/* ---- barcode scan ---- */
+let SC=null;
+const SCF=["ean_13","ean_8","code_128","code_39","code_93","upc_a","upc_e","itf","codabar","qr_code","data_matrix"];
+const loadScript=u=>new Promise((ok,no)=>{const e=document.createElement("script");e.src=u;e.onload=ok;e.onerror=()=>no(new Error("load"));document.head.appendChild(e)});
+function openScan(mode){
+ closeScan();const w=document.createElement("div");w.className="scn";w.id="scn";
+ w.innerHTML=`<div class="bx" role="dialog" aria-modal="true" aria-label="Scan barcode"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><h2 style="margin:0">📷 Scan sparepart barcode</h2><button class="btn" type="button" onclick="closeScan()">Close</button></div>
+ <div class="scv" id="scv"><video id="scvid" playsinline muted autoplay></video><div class="scl"></div></div><div id="scr" hidden></div>
+ <p class="scm" id="scm">Starting camera…</p><div id="scx"></div>
+ <div style="display:flex;gap:6px"><input id="scman" placeholder="Or type / scan SKU then Enter" autocomplete="off" autocapitalize="characters"><button class="btn p" type="button" onclick="scManual()">OK</button></div></div>`;
+ document.body.appendChild(w);SC={mode:mode||"o",on:true,busy:false,last:"",lastT:0,stream:null,h5:null,tm:0};
+ $("scman").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();scManual()}});startCam(SC)}
+function closeScan(){const o=$("scn");
+ if(SC){const c=SC;SC=null;c.on=false;clearTimeout(c.tm);try{if(c.stream)c.stream.getTracks().forEach(t=>t.stop())}catch(e){}if(c.h5){try{c.h5.stop().then(()=>c.h5.clear()).catch(()=>{})}catch(e){}}}
+ if(o)o.remove()}
+async function startCam(me){
+ const msg=t=>{const e=$("scm");if(e&&SC===me)e.textContent=t},noCam=t=>{msg(t);const m=$("scman");if(m)m.focus()};
+ if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){noCam("Camera not available (needs HTTPS and camera permission). Type the SKU below.");return}
+ try{
+  if("BarcodeDetector" in window){
+   let fm=SCF;try{const sup=await BarcodeDetector.getSupportedFormats();fm=SCF.filter(f=>sup.includes(f))}catch(e){}
+   if(fm.length){
+    const det=new BarcodeDetector({formats:fm}),st=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:"environment"}},audio:false});
+    if(SC!==me){st.getTracks().forEach(t=>t.stop());return}
+    me.stream=st;const v=$("scvid");v.srcObject=st;await v.play();msg("Point the camera at the sparepart barcode.");
+    const tick=async()=>{if(SC!==me||!me.on)return;try{if(!me.busy&&v.readyState>=2){const r=await det.detect(v);if(r&&r.length&&SC===me)scGot(r[0].rawValue)}}catch(e){}if(SC===me)me.tm=setTimeout(tick,160)};
+    tick();return}
+  }
+  await loadScript("https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js");
+  if(SC!==me)return;
+  $("scv").hidden=true;const box=$("scr");box.hidden=false;
+  const Fm=window.Html5QrcodeSupportedFormats,h=new Html5Qrcode("scr",{verbose:false,formatsToSupport:[Fm.CODE_128,Fm.CODE_39,Fm.CODE_93,Fm.EAN_13,Fm.EAN_8,Fm.UPC_A,Fm.UPC_E,Fm.ITF,Fm.CODABAR,Fm.QR_CODE,Fm.DATA_MATRIX]});
+  me.h5=h;await h.start({facingMode:"environment"},{fps:10,qrbox:{width:260,height:150}},t=>{if(SC===me)scGot(t)},()=>{});
+  if(SC!==me){h.stop().then(()=>h.clear()).catch(()=>{});return}
+  msg("Point the camera at the sparepart barcode.")
+ }catch(e){noCam("Camera could not open ("+((e&&e.name)||"error")+"). Allow camera access, or type the SKU below.")}
+}
+function scManual(){const m=$("scman");if(!m||!SC)return;SC.last="";scGot(m.value)}
+function scGot(code){
+ if(!SC||SC.busy)return;code=T(code).trim();if(!code)return;
+ const now=Date.now();if(code===SC.last&&now-SC.lastT<2500)return;SC.last=code;SC.lastT=now;
+ try{if(navigator.vibrate)navigator.vibrate(60)}catch(e){}
+ const p=findSku(code),md=SC.mode;
+ if(md==="sku"){closeScan();if(p){PQ=p.sku;toast("Already in the list: "+p.name)}else{NPF.sku=code.toUpperCase();toast("SKU "+NPF.sku+" scanned")}draw();return}
+ if(!p){SC.busy=true;const x=$("scx");if(x)x.innerHTML=`<div class="rec" style="margin:0 0 10px"><b>SKU ${esc(code)} is not in the sparepart list.</b> Ask the cashier to add it in the main app.<div class="opts"><button type="button" class="btn opt" onclick="scResume()">Scan again</button></div></div>`;return}
+ closeScan();md==="v"?scAddOF(p):scAdd(p)}
+function scResume(){if(!SC)return;SC.busy=false;const x=$("scx");if(x)x.innerHTML="";const m=$("scman");if(m)m.value=""}
+function scAdd(p){
+ let l=F.pl.find(x=>x.pid===p.id),again=false;
+ if(l){l.qty=Math.max(1,num(l.qty))+1;again=true}
+ else{const e=F.pl.find(x=>!x.pid&&!x.bx);if(e){e.pid=p.id;l=e}else{l={id:uid(),pid:p.id,qty:1};F.pl.push(l)}}
+ draw();toast("✓ "+p.name+(again?" · qty "+l.qty:" added"));
+ setTimeout(()=>{const e=$("pp_"+l.id);if(e)e.scrollIntoView({block:"center",behavior:"smooth"})},60)}
+function scAddOF(p){
+ let l=OF.pl.find(x=>x.pid===p.id),again=false;
+ if(l){l.qty=Math.max(1,num(l.qty))+1;again=true}
+ else{const e=OF.pl.find(x=>!x.pid&&!x.bx);if(e){e.pid=p.id;l=e}else{l={id:uid(),pid:p.id,qty:1};OF.pl.push(l)}}
+ draw();toast("✓ "+p.name+(again?" · qty "+l.qty:" added"));
+ setTimeout(()=>{const e=$("opp_"+l.id);if(e)e.scrollIntoView({block:"center",behavior:"smooth"})},60)}
+let tsT=0;function toast(t){let e=$("toast");if(!e){e=document.createElement("div");e.id="toast";e.className="toast";document.body.appendChild(e)}e.textContent=t;e.hidden=false;clearTimeout(tsT);tsT=setTimeout(()=>{e.hidden=true},2800)}
+
+/* ---- plate autofill + notes for next visit ---- */
+function plateInputG(G,AFo,pre,v,after){
+ G.plate=v.toUpperCase();
+ const k=vk(G.plate,G.eng),m=(pk(G.plate).length<3||(isNP(G.plate)&&!pk(G.eng)))?null:L.plates[k];
+ const fill={cust:m?m.c:"",phone:m?m.p:"",addr:m?m.a:"",motor:m?m.m:""};
+ for(const x of["cust","phone","addr","motor"]){if(!G[x]||G[x]===AFo[x]){G[x]=fill[x];AFo[x]=fill[x];const el=$(pre+x);if(el)el.value=fill[x]}}
+ after();
+}
+function plateInput(v){plateInputG(F,AF,"f-",v,pnRefresh)}
+function ovPlate(v){plateInputG(OF,AF2,"g-",v,pnRefresh2)}
+function ovEng(v){OF.eng=v.toUpperCase();ovPlate(OF.plate)}
+function pnAlertO(){return pnAlertHTML(OF)}
+function pnRefresh2(){const a=$("pna2");if(a)a.innerHTML=pnAlertO()}
+function engInput(v){F.eng=v.toUpperCase();plateInput(F.plate)}
+function openNotes(X){X=X||F;const k=vk(X.plate,X.eng);if(!pk(X.plate))return[];
+ return [...L.notes,...P.flatMap(e=>A(e.notes).map(n=>({id:n.id,plate:e.plate,eng:e.eng,motor:e.motor,text:n.text,why:n.why,date:e.date}))),...X.notes.map(n=>({id:n.id,plate:X.plate,eng:X.eng,motor:X.motor,text:n.text,why:n.why,date:today(),mine:1}))].filter(n=>vk(n.plate,n.eng)===k||n.mine)}
+function pnAlertHTML(X){X=X||F;const o=openNotes(X).filter((n,i,a)=>a.findIndex(x=>x.id===n.id)===i);
+ return o.length?`<div class="card warn"><h2>⚠ Note for this motorcycle (${esc(X.plate)})</h2>${o.map(n=>`<div class="hist"><b>${esc(n.text)}</b><br><span class="mu">${esc(n.why||"")}${n.why?" · ":""}${esc(n.date)}${n.motor?" · "+esc(n.motor):""}${n.mine?" · new, will be sent with this order":""}</span>${n.mine?` <button class="btn x" style="min-height:0;padding:2px 8px" onclick="rmNote('${n.id}')">✕</button>`:""}</div>`).join("")}</div>`:""}
+function pnRefresh(){const a=$("pna");if(a)a.innerHTML=pnAlertHTML()}
+function addNote(){const t=F.NT.t.trim();if(!pk(F.plate)){alert("Enter the plate number first.");return}if(!t){alert("Write what needs to be changed.");return}
+ F.notes.push({id:uid(),text:t,why:F.NT.w});F.NT.t="";keep(draw)}
+function rmNote(id){F.notes=F.notes.filter(n=>n.id!==id);OF.notes=OF.notes.filter(n=>n.id!==id);keep(draw)}
+function addNoteO(){const t=OF.NT.t.trim();if(!pk(OF.plate)){alert("Enter the plate number first.");return}if(!t){alert("Write what needs to be changed.");return}
+ OF.notes.push({id:uid(),text:t,why:OF.NT.w});OF.NT.t="";keep(draw)}
+
+/* ---- submit ---- */
+function fdNew(){if(confirm("Clear form?")){F=blank();AF={};keep(draw)}}
+function fdDel(){if(confirm("Delete this order?")){F=blank();AF={};keep(draw)}}
+function fdAllMech(v){if(!v)return;F.lines.forEach(l=>l.mech=v);keep(draw)}
+function submit(){
+ const plate=F.plate.trim().toUpperCase(),po=!!F.po;
+ if(!plate&&!po){msg={t:"er",m:"Enter the plate number (or NON DS)."};return draw()}
+ const lines=po?[]:F.lines.filter(l=>l.sid||l.name.trim()||num(l.price)>0).map(l=>({id:l.id,sid:l.sid,name:l.name.trim(),price:num(l.price),mech:l.mech||"",pj:l.pj||"",sp:l.sp?1:0}));
+ {const bad=bxCheck(F.pl);if(bad){msg={t:"er",m:bad};return draw()}}
+ const pl=F.pl.filter(l=>l.pid||bxLive(l)).map(l=>{if(l.bx)return bxOut(l);const r={id:l.id,pid:l.pid,qty:Math.max(1,num(l.qty)||1)};if(l.rj)r.rj=l.rj;if(l.rd)r.rd=1;if(l.pk)r.pk=l.pk;if(l.pf)r.pf=l.pf;return r});
+ if(po&&!pl.length){msg={t:"er",m:"Add at least one sparepart"};return draw()}
+ if(!lines.length&&!pl.length&&!F.notes.length){msg={t:"er",m:"Add at least one work, sparepart or note."};return draw()}
+ const e={id:uid(),created:Date.now(),date:today(),queue:po?0:Math.floor(num(($("f-q")||{}).value||F.q))||nextQ(),plate,eng:F.eng.trim().toUpperCase(),motor:F.motor.trim(),cust:F.cust.trim(),phone:F.phone.trim(),addr:F.addr.trim(),note:F.note.trim(),
+  po:po?1:0,lines,pl,disc:Math.max(0,num(F.disc)),discT:F.discT,discN:F.discN.trim(),notes:po?[]:F.notes.map(n=>({id:n.id,text:n.text,why:n.why}))};
+ P.push(e);sv(PK,P);F=blank();AF={};msg={t:"ok",m:"Sent to the main app: "+(plate||"Walk-in")+(online?"":" (saved, will send when online)")};scrollTo(0,0);draw();
+ flush().then(()=>{setTimeout(refresh,3500)});
+}
+
+/* ---- views ---- */
+/* minimize / expand every card that starts with a red title */
+let MN={};/* every card starts minimized when the app opens; 0 = opened by the user during this visit */
+/* stable key: taken once from the original (untranslated) title, without counts/months, and cached on the element so translation or "(3)" -> "(4)" never resets a card */
+const mnKey=h=>{let s=h.getAttribute("data-mk");if(s===null){s=h.textContent.trim().replace(/\s*[\(·].*$/,"").trim()||h.textContent.trim();h.setAttribute("data-mk",s)}return tab+"|"+s};
+function mini(root){(root||document).querySelectorAll(".card").forEach(c=>{const h=c.firstElementChild;
+ if(!h||h.tagName!=="H2"||h.hasAttribute("onclick")||h.classList.contains("dht")||c.closest("[data-nomini]"))return;
+ c.classList.add("mn");h.setAttribute("role","button");h.tabIndex=0;const k=mnKey(h),cl=MN[k]!==0;c.classList.toggle("cl",cl);h.setAttribute("aria-expanded",String(!cl))})}
+function mnTog(h){const c=h.parentElement,k=mnKey(h);const cl=!c.classList.contains("cl");c.classList.toggle("cl",cl);h.setAttribute("aria-expanded",String(!cl));MN[k]=cl?1:0}
+document.addEventListener("click",e=>{const h=e.target.closest&&e.target.closest(".card.mn>h2");if(h)mnTog(h)});
+document.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&e.target.matches&&e.target.matches(".card.mn>h2")){e.preventDefault();mnTog(e.target)}});
+function draw(){
+ const a=$("app");
+ if(!C.token){a.innerHTML=setup();return}
+ const tabs='<div class="tabs"><button class="btn '+(tab==="new"?"on":"")+'" onclick="tab=\'new\';msg=null;draw()">Work Order</button><button class="btn '+(tab==="ovh"?"on":"")+'" onclick="tab=\'ovh\';msg=null;draw()">Overhaul</button><button class="btn '+(tab==="lcr"?"on":"")+'" onclick="tab=\'lcr\';msg=null;draw();refresh()">LCR</button><button class="btn '+(tab==="queue"?"on":"")+'" onclick="tab=\'queue\';msg=null;draw();refresh()">Today\'s Queue</button><button class="btn '+(tab==="parts"?"on":"")+'" onclick="tab=\'parts\';msg=null;draw();refresh()">Spareparts</button></div>';
+ const m=msg?'<div class="msg '+msg.t+'">'+esc(msg.m)+'</div>':"";
+ const y=scrollY;a.innerHTML=tabs+m+(tab==="new"?vNew():tab==="ovh"?vOvh():tab==="lcr"?vLcr():tab==="parts"?vParts():vQueue())+(tab==="queue"?'<div class="instSlot"></div>':"");conn();if(tab==="new")calc();if(tab==="ovh")calcO();mini(a);scrollTo(0,y);
+}
+/* ---- No. antrian (read-only): next queue number for today = highest queue today + jobs still waiting to be sent + 1. The main app still assigns the official number. ---- */
+function nextQ(){
+ const td=today();let m=0;
+ (L.orders||[]).forEach(o=>{if(o.date===td){const q=Math.floor(num(qv(o)));if(q>m)m=q}});
+ const pe=P.filter(e=>(!e.kind||e.kind==="ovh")&&!e.po&&e.date===td);pe.forEach(e=>{const q=Math.floor(num(e.queue));if(q>m)m=q});
+ return m+pe.filter(e=>!(num(e.queue)>0)).length+1}
+const tglLbl=()=>new Date().toLocaleDateString("id-ID",{day:"numeric",month:"short",year:"numeric"});
+const qHdr=(po,X)=>{const k=X===OF?"g-q":"f-q";return `<div><label>No. antrian</label><input id="${k}" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" ${po?"disabled value=\"-\"":`value="${esc(X.q||nextQ())}" oninput="this.value=this.value.replace(/\\D/g,'');${X===OF?"OF":"F"}.q=this.value"`} style="font-weight:700"></div><div><label>Tanggal</label><input readonly tabindex="-1" aria-readonly="true" value="${esc(tglLbl())}" style="cursor:default"></div>`};
+function vNew(){
+ const mo=sel=>`<option value="" ${sel?"":"selected"} disabled>— Select mechanic —</option>`+(L.mechs.includes(sel)||!sel?L.mechs:[...L.mechs,sel]).map(m=>`<option ${m===sel?"selected":""}>${esc(m)}</option>`).join("");
+ const ws=["Out of stock","Customer short of money","Other"];
+ return `<div class="card"><label style="display:flex;align-items:center;gap:8px;margin:0 0 10px;font-size:14px;cursor:pointer"><input type="checkbox" style="width:auto;margin:0" ${F.po?"checked":""} onchange="setPO(this.checked)"> Hanya sparepart (pelanggan hanya membeli sparepart, tanpa servis)</label><div class="g">
+ ${qHdr(F.po,F)}
+ <div><label>Plate number${F.po?" (optional)":""}</label><input id="f-plate" value="${esc(F.plate)}" placeholder="DS 1234 AB" autocapitalize="characters" oninput="plateInput(this.value)"></div>
+ ${F.po?"":`<div><label>Motor type</label><input id="f-motor" list="ml" value="${esc(F.motor)}" placeholder="Honda Beat" oninput="F.motor=this.value"><datalist id="ml">${L.motors.map(m=>`<option value="${esc(m)}">`).join("")}</datalist></div>`}
+ <div><label>Customer name</label><input id="f-cust" value="${esc(F.cust)}" oninput="F.cust=this.value" autocomplete="off"></div>
+ <div><label>Phone number</label><input id="f-phone" type="tel" inputmode="tel" value="${esc(F.phone)}" placeholder="08xxxxxxxxxx" oninput="F.phone=this.value" autocomplete="off"></div>
+ ${F.po?"":`<div class="s2"><label>Engine number (only for NON DS — leave empty and it is made automatically)</label><input value="${esc(F.eng)}" oninput="engInput(this.value)" autocomplete="off"></div>`}
+ <div class="s2"><label>Address (optional)</label><input id="f-addr" value="${esc(F.addr)}" oninput="F.addr=this.value" autocomplete="off"></div>
+ ${F.po?"":`<div class="s2"><label>Complaint / message for the mechanic (optional)</label><input value="${esc(F.note)}" oninput="F.note=this.value" placeholder="e.g. engine noise, brake soft"></div>`}</div></div>
+ <div id="pna">${pnAlertHTML()}</div>
+ ${F.po?"":`<div class="card"><h2>List of Work</h2>
+ ${F.lines.map(l=>`<div class="row rs ${l.sp?"wk-s":"wk-n"}"><div><label>${l.sp?"★ Jasa Spesial (cari)":"Service type (search)"}</label>${cbIn(l.sp?"z":"s",l.id,(L.services.find(x=>x.id===l.sid)||{}).name||"","Search or pick…")}</div>
+ <div><label>Work description</label><input value="${esc(l.name)}" oninput="ln('${l.id}','name',this.value)"></div>
+ <div><label>Service price</label><input type="number" inputmode="numeric" value="${l.price}" oninput="ln('${l.id}','price',num(this.value))"></div>
+ <div><label>Mechanic</label><select onchange="ln('${l.id}','mech',this.value)">${mo(l.mech)}</select></div>
+ <button class="btn x" onclick="rmLine('${l.id}')" aria-label="Remove">✕</button></div>`).join("")}
+ <button class="btn" onclick="addLine()">+ Add work</button> <button class="btn p" onclick="addLine(1)">+ Jasa Spesial</button></div>`}
+ <div class="card"><h2>Spareparts</h2>
+ ${pgGrp(F.pl,(l,i)=>{if(l.bx)return bxRow(l,"f");const p=part(l.pid);return `<div class="row rp ${l.pg?"pl-g":"pl-n"}"><div><label>Part (search)${p?` <span style="color:${p.stock<=0?"var(--ac)":"var(--mu)"}">· Stock: ${p.stock}${p.stock<=0?" (empty, still allowed)":""}</span>`:""}</label>${cbIn("p",l.id,pLbl(l),"Search SKU or name…")}</div>
+ <div><label>Qty</label><input type="number" min="1" value="${l.qty}" oninput="pl_('${l.id}','qty',Math.max(1,num(this.value)))"></div>
+ <div class="ro">Price<br><b id="pp_${l.id}">${p?rp(p.price*l.qty):"-"}</b></div>
+ <button class="btn x" onclick="rmPl('${l.id}')" aria-label="Remove">✕</button></div>${recAt(F.pl,i,recHTML)}`})}
+ <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><button class="btn" onclick="addPlEmpty()">+ Add sparepart</button><button class="btn" type="button" onclick="addBeli('f')">+ Tambah sparepart (beli)</button><button class="btn p" type="button" onclick="openScan('o')">📷 Scan barcode</button>
+ ${L.pkgs.length?`<div style="flex:1 1 200px;max-width:340px">${cbIn("k","new","","📦 Add package (search)…",1)}</div>`:""}</div></div>
+ <div class="card"><h2>Discount</h2><div class="g"><div><label>Type</label><select onchange="F.discT=this.value;calc()"><option value="rp" ${F.discT!=="pct"?"selected":""}>Amount (Rp)</option><option value="pct" ${F.discT==="pct"?"selected":""}>Percent (%)</option></select></div>
+ <div><label>Discount</label><input type="number" inputmode="decimal" min="0" value="${F.disc||""}" placeholder="0" oninput="F.disc=Math.max(0,num(this.value));calc()"></div>
+ <div class="s2"><label>Discount name (optional)</label><input value="${esc(F.discN)}" placeholder="e.g. Loyal customer, Promo Oktober" oninput="F.discN=this.value;calc()"></div></div></div>
+ ${F.po?"":`<div class="card"><h2>Note for next visit</h2><p class="mu" style="margin:0 0 8px">Sparepart or work this motorcycle still needs (out of stock, or customer can't pay now). It will pop up the next time this plate number is entered.</p>
+ <div class="g"><div class="s2"><label>What needs to be changed</label><input value="${esc(F.NT.t)}" oninput="F.NT.t=this.value" placeholder="e.g. Kampas rem depan, Rantai"></div>
+ <div><label>Reason</label><select onchange="F.NT.w=this.value">${ws.map(w=>`<option ${w===F.NT.w?"selected":""}>${w}</option>`).join("")}</select></div>
+ <div style="align-self:end"><button class="btn p" onclick="addNote()">+ Add note</button></div></div></div>`}
+ <div class="card sum" id="sum"></div>
+ <button class="btn p" style="width:100%" onclick="submit()">Send to workshop</button>
+ <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px"><button class="btn" onclick="fdNew()">New</button><button class="btn" onclick="print()">Print</button><button class="btn" style="color:#b91c1c;border-color:#b91c1c" onclick="fdDel()">Delete</button>${F.po?"":`<select aria-label="Mechanic for all work lines" style="width:auto;min-width:150px" onchange="fdAllMech(this.value)">${(()=>{const ms=[...new Set(F.lines.map(l=>l.mech).filter(Boolean))];return mo(ms.length===1?ms[0]:"")})()}</select>`}</div>
+ <p class="mu" style="margin:8px 0 0">The total is an estimate. The cashier checks and finishes the order in the main app.</p>`;
+}
+const QK="fd_qcol";let QC=ld(QK,{});
+const dLbl=d=>{const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(d||"");if(!m)return d||"No date";const x=new Date(+m[1],+m[2]-1,+m[3]);return x.toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short",year:"numeric"})};
+const qCol=d=>d in QC?QC[d]:d!==today();
+function qTog(d){QC[d]=!qCol(d);sv(QK,QC);const y=scrollY;draw();scrollTo(0,y)}
+/* queue-number edits typed here show at once; the main app applies them from the inbox (kind "queue") */
+const QOK="fd_qo";let QO=ld(QOK,{}),QEd=null;
+const qv=o=>{const x=QO[o.id];return x&&Date.now()-x.t<18e5?x.q:o.queue};
+/* PKB cancelled on the front desk: hidden at once; the main app deletes it (only if still Waiting) via inbox kind "cancel" */
+const QXK="fd_qx";let QX=ld(QXK,{});
+function qVoid(id,ov){
+ const o=L.orders.find(x=>String(x.id)===String(id));
+ if(!o)return;
+ if(o.status!=="Waiting"){alert("PKB hanya bisa dibatalkan saat status masih Menunggu.");return}
+ if(!confirm("Batalkan PKB "+(o.plate||"")+"?\nPKB akan dihapus dari antrian dan bengkel."))return;
+ QX[id]={t:Date.now()};sv(QXK,QX);
+ P.push({id:uid(),created:Date.now(),kind:"cancel",oid:id,ov:ov?1:0,plate:o.plate||""});sv(PK,P);
+ keep(draw);toast("PKB dibatalkan: "+(o.plate||""));flush()}
+const qShow=o=>o.date===today()||o.status!=="Done"; /* finished orders disappear after the day is over */
+function qEdit(id){QEd=id;keep(draw);setTimeout(()=>{const e=$("qe_"+id);if(e){e.focus();e.select()}},30)}
+function qCancel(){QEd=null;keep(draw)}
+function qSave(id,ov){
+ const e=$("qe_"+id),n=e?Math.floor(num(e.value)):0;
+ if(!(n>0)){alert("Masukkan nomor antrian (angka 1 atau lebih).");return}
+ QO[id]={q:n,t:Date.now()};sv(QOK,QO);
+ P.push({id:uid(),created:Date.now(),kind:"queue",oid:id,ov:ov?1:0,queue:n});sv(PK,P);
+ QEd=null;keep(draw);toast("Nomor antrian diubah: #"+n);flush()}
+function vQueue(){
+ const sc=s=>s==="Done"?"Done":s==="In Progress"?"IP":"W";
+ const pend=P.filter(e=>!e.kind||e.kind==="ovh").map(e=>`<div class="q"><div><b>${esc(e.plate||(e.po?"Walk-in":""))}</b> <span class="mu">${e.po?"Hanya sparepart":esc(e.motor)}</span><div class="mu">Waiting to send…</div></div><span class="st W">Pending</span></div>`).join("");
+ const LO=L.orders.filter(o=>qShow(o)&&!QX[o.id]);
+ const ds=[...new Set(LO.map(o=>o.date||""))].sort().reverse();
+ const row=o=>{const q=qv(o),ed=QEd===o.id,id=esc(String(o.id)),ov=o.ov?1:0,
+  left=ed?`<div><label class="mu" for="qe_${id}">Nomor antrian</label><div style="display:flex;gap:6px;align-items:center;margin-top:4px"><input id="qe_${id}" type="number" min="1" inputmode="numeric" value="${q==null?"":esc(q)}" style="width:90px" onkeydown="if(event.key==='Enter'){event.preventDefault();qSave('${id}',${ov})}else if(event.key==='Escape')qCancel()"><button type="button" class="btn p" onclick="qSave('${id}',${ov})">Simpan</button><button type="button" class="btn" onclick="qCancel()">Batal</button></div><div><b>${esc(o.plate||"-")}</b> <span class="mu">${esc(o.motor)}</span></div></div>`
+  :`<div><span class="qn">${q!=null&&q!==""?"#"+esc(q):""}</span><b>${esc(o.plate||"-")}</b> <span class="mu">${esc(o.motor)}</span>${o.ov?' <span class="st IP">Overhaul</span>':""}${o.cust?`<div class="mu">${esc(o.cust)}</div>`:""}</div>`;
+  return `<div class="q">${left}<div style="display:flex;gap:6px;align-items:center;flex-shrink:0">${ed?"":`<button type="button" class="btn" style="min-height:30px;padding:2px 8px" onclick="qEdit('${id}')" aria-label="Ubah nomor antrian" title="Ubah nomor antrian">✎</button>`}${(!ed&&o.status==="Waiting")?`<button type="button" class="btn x" style="min-height:30px;padding:2px 8px;border-color:#b91c1c" onclick="qVoid('${id}',${ov})" aria-label="Batalkan PKB" title="Batalkan PKB">Batalkan</button>`:""}<span class="st ${sc(o.status)}">${esc(o.status)}</span></div></div>`};
+ const grp=ds.map(d=>{
+  const G=LO.filter(o=>(o.date||"")===d).sort((a,b)=>num(qv(a))-num(qv(b))),open=G.filter(o=>o.status!=="Done").length,cl=qCol(d);
+  return `<div class="dg"><div class="dgh" role="button" tabindex="0" aria-expanded="${!cl}" onclick="qTog('${esc(d)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();qTog('${esc(d)}')}"><span><b>${esc(dLbl(d))}</b>${d===today()?' <span class="st IP">Today</span>':""}<span class="mu"> · ${G.length} vehicle${G.length===1?"":"s"}${open?" · "+open+" unfinished":""}</span></span><span class="chev${cl?" cl":""}" aria-hidden="true">▾</span></div>${cl?"":`<div class="dgb">${G.map(row).join("")}</div>`}</div>`}).join("");
+ return `<div class="card"><h2>Queue</h2>${pend}${grp||(pend?"":'<div class="mu">No vehicles yet.</div>')}</div>
+ <button class="btn" onclick="refresh()">⟳ Refresh</button>`;
+}
+/* ---- Overhaul ---- */
+function calcO(){const e=$("osum");if(!e)return;let pp=0;OF.pl.forEach(l=>{if(l.bx){pp+=num(l.bp)*Math.max(1,num(l.qty));return}const p=part(l.pid);if(p)pp+=p.price*l.qty});const o=num(OF.price),s=ovJS(),z=ovSS();
+ e.innerHTML=`<div><span>Overhaul</span><b>${rp(o)}</b></div>${s+z+pp>0?`<div><span>Service + spareparts</span><b>${rp(s+z+pp)}</b></div>`:""}<div class="b"><span>TOTAL</span><span>${rp(o+s+z+pp)}</span></div>`}
+function ovAddSp(){OF.sl.push({id:uid(),sid:"",name:"",price:0,mech:(OF.sl.at(-1)||{}).mech||OF.mech||""});keep(draw);calcO()}
+function ovSl(id,k,v){const l=OF.sl.find(x=>x.id===id);if(!l)return;l[k]=v;calcO()}
+function ovRmSp(id){OF.sl=OF.sl.filter(x=>x.id!==id);keep(draw);calcO()}
+const ovSS=()=>OF.sl.reduce((a,l)=>a+num(l.price),0);
+const ovJS=()=>OF.jl.reduce((a,l)=>a+num(l.price),0);
+function ovJl(id,k,v){const l=OF.jl.find(x=>x.id===id);if(!l)return;l[k]=v;calcO()}
+function ovAddJl(){OF.jl.push(emptyLine(OF.mech));keep(draw);calcO()}
+function ovRmJl(id){const x=OF.jl.find(a=>a.id===id);if(x&&x.pj){const l=OF.pl.find(q=>q.id===x.pj);if(l){l.rj="";l.rjf=0;l.rjn=""}}OF.jl=OF.jl.filter(a=>a.id!==id);if(!OF.jl.length)OF.jl.push(emptyLine(OF.mech));keep(draw);calcO()}
+/* service-fee recommendation = a work line (like Work Order), so closing the box never removes it */
+function ovUndo(l){
+ if(!l||!l.rj)return;OF.jl=OF.jl.filter(x=>x.pj!==l.id);if(!OF.jl.length)OF.jl.push(emptyLine(OF.mech));l.rj="";l.rjf=0;l.rjn=""}
+function ovSetRec(id,k){
+ const l=OF.pl.find(x=>x.id===id),p=l&&recSrc(l);if(!p)return;
+ if(l.rj===k){ovUndo(l);keep(draw);calcO();return}
+ ovUndo(l);const fe=jfee(p,k),nm="Jasa ganti "+(p.pkg?"paket ":"")+p.name+(p.pkg?"":" ("+JN[k]+")"),b=OF.jl.findIndex(x=>!x.sid&&!x.name&&!num(x.price)&&!x.pj),nl={id:uid(),sid:"",name:nm,price:fe,mech:OF.mech||"",pj:id};
+ if(b>=0){nl.id=OF.jl[b].id;OF.jl[b]=nl}else OF.jl.push(nl);
+ l.rj=k;l.rjf=fe;l.rjn=nm;keep(draw);calcO()}
+function ovClose(id){const l=OF.pl.find(x=>x.id===id);if(l)l.rd=1;keep(draw)}
+function recHTMLO(l){
+ const p=recSrc(l);if(l.rd||!p||!(p.jd>0||p.jt>0)||pkHas(l,OF.pl)||l.rj)return"";
+ const op=k=>{const fe=jfee(p,k);if(!(fe>0))return"";return `<button type="button" class="btn opt${l.rj===k?" on":""}" onclick="ovSetRec('${l.id}','${k}')"><b>Add service fee${p.pkg?"":" "+JN[k]}</b> · ${rp(fe)}</button>`};
+ return `<div class="rec"><span class="rct">Service fee to replace ${p.pkg?"package ":""}<b>${esc(p.name)}</b>?</span><button type="button" class="btn rcx" onclick="ovClose('${l.id}')" aria-label="Close">✕</button><div class="opts">${op("d")}${p.pkg?"":op("t")}</div></div>`}
+function opl(id,k,v){const l=OF.pl.find(x=>x.id===id);l[k]=v;if(k==="qty"){const p=part(l.pid),e=$("opp_"+id);if(p&&e)e.textContent=rp(p.price*l.qty);calcO()}}
+function rmOPf(id){const l=OF.pl.find(x=>x.id===id);if(l&&l.rj)ovUndo(l);OF.pl=OF.pl.filter(x=>x.id!==id);keep(draw)}
+function vOvh(){
+ const mo=sel=>`<option value="" ${sel?"":"selected"} disabled>— Select mechanic —</option>`+(L.mechs.includes(sel)||!sel?L.mechs:[...L.mechs,sel]).map(m=>`<option ${m===sel?"selected":""}>${esc(m)}</option>`).join("");
+ return `<div class="card"><h2>Overhaul engine job</h2><div class="g">
+ ${qHdr(false,OF)}
+ <div><label>Plate number</label><input id="g-plate" value="${esc(OF.plate)}" placeholder="DS 1234 AB" autocapitalize="characters" oninput="ovPlate(this.value)"></div>
+ <div><label>Motor type</label><input id="g-motor" list="ml" value="${esc(OF.motor)}" placeholder="Honda Beat" oninput="OF.motor=this.value"></div>
+ <div><label>Customer name</label><input id="g-cust" value="${esc(OF.cust)}" oninput="OF.cust=this.value" autocomplete="off"></div>
+ <div><label>Phone number</label><input id="g-phone" type="tel" inputmode="tel" value="${esc(OF.phone)}" placeholder="08xxxxxxxxxx" oninput="OF.phone=this.value" autocomplete="off"></div>
+ <div class="s2"><label>Engine number (only for NON DS — leave empty and it is made automatically)</label><input value="${esc(OF.eng)}" oninput="ovEng(this.value)" autocomplete="off"></div>
+ <div class="s2"><label>Address (optional)</label><input id="g-addr" value="${esc(OF.addr)}" oninput="OF.addr=this.value" autocomplete="off"></div>
+ <div><label>Overhaul price (Rp)</label><input type="number" inputmode="numeric" value="${esc(OF.price)}" placeholder="0" oninput="OF.price=this.value;calcO()"></div>
+ <div><label>Mechanic</label><select onchange="OF.mech=this.value;keep(draw)">${mo(OF.mech)}</select></div>
+ </div></div>
+ <div id="pna2">${pnAlertO()}</div>
+ <div class="card"><h2>List of Work</h2>
+ ${OF.jl.map(l=>`<div class="row rs wk-n"><div><label>Service type (search)</label>${cbIn("vo",l.id,(L.services.find(x=>x.id===l.sid)||{}).name||"","Search or pick…")}</div>
+ <div><label>Work description</label><input value="${esc(l.name)}" oninput="ovJl('${l.id}','name',this.value)"></div>
+ <div><label>Service price</label><input type="number" inputmode="numeric" value="${l.price}" oninput="ovJl('${l.id}','price',num(this.value))"></div>
+ <div><label>Mechanic</label><select onchange="OF.mech=this.value;keep(draw)">${mo(OF.mech)}</select></div>
+ <button class="btn x" onclick="ovRmJl('${l.id}')" aria-label="Remove">✕</button></div>`).join("")}
+ ${OF.sl.map(l=>`<div class="row rs wk-s"><div><label>★ Jasa Spesial (cari)</label>${cbIn("zo",l.id,(L.services.find(x=>x.id===l.sid)||{}).name||"","Search or pick…")}</div>
+ <div><label>Work description</label><input value="${esc(l.name)}" oninput="ovSl('${l.id}','name',this.value)"></div>
+ <div><label>Service price</label><input type="number" inputmode="numeric" value="${l.price}" oninput="ovSl('${l.id}','price',num(this.value))"></div>
+ <div><label>Mechanic</label><select onchange="ovSl('${l.id}','mech',this.value)">${mo(l.mech)}</select></div>
+ <button class="btn x" onclick="ovRmSp('${l.id}')" aria-label="Remove">✕</button></div>`).join("")}
+ <button class="btn" type="button" onclick="ovAddJl()">+ Add work</button> <button class="btn p" type="button" onclick="ovAddSp()">+ Jasa Spesial</button></div>
+ <div class="card"><h2>Spareparts (optional)</h2>
+ ${pgGrp(OF.pl,(l,i)=>{if(l.bx)return bxRow(l,"v");const p=part(l.pid);return `<div class="row rp ${l.pg?"pl-g":"pl-n"}"><div><label>Part (search)${p?` <span style="color:${p.stock<=0?"var(--ac)":"var(--mu)"}">· Stock: ${p.stock}${p.stock<=0?" (empty, still allowed)":""}</span>`:""}</label>${cbIn("o",l.id,pLbl(l),"Search SKU or name…")}</div>
+ <div><label>Qty</label><input type="number" min="1" value="${l.qty}" oninput="opl('${l.id}','qty',Math.max(1,num(this.value)))"></div>
+ <div class="ro">Price<br><b id="opp_${l.id}">${p?rp(p.price*l.qty):"-"}</b></div>
+ <button class="btn x" onclick="rmOPf('${l.id}')" aria-label="Remove">✕</button></div>${recAt(OF.pl,i,recHTMLO)}`})}
+ <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><button class="btn" onclick="OF.pl.push({id:uid(),pid:'',qty:1});keep(draw)">+ Add sparepart</button><button class="btn" type="button" onclick="addBeli('v')">+ Tambah sparepart (beli)</button><button class="btn p" type="button" onclick="openScan('v')">📷 Scan barcode</button>
+ ${L.pkgs.length?`<div style="flex:1 1 200px;max-width:340px">${cbIn("k2","new","","📦 Add package (search)…",1)}</div>`:""}</div></div>
+ <div class="card"><h2>Note for next visit</h2><p class="mu" style="margin:0 0 8px">Sparepart or work this motorcycle still needs (out of stock, or customer can't pay now). It will pop up the next time this plate number is entered.</p>
+ <div class="g"><div class="s2"><label>What needs to be changed</label><input value="${esc(OF.NT.t)}" oninput="OF.NT.t=this.value" placeholder="e.g. Kampas rem depan, Rantai"></div>
+ <div><label>Reason</label><select onchange="OF.NT.w=this.value">${["Out of stock","Customer short of money","Other"].map(w=>`<option ${w===OF.NT.w?"selected":""}>${w}</option>`).join("")}</select></div>
+ <div style="align-self:end"><button class="btn p" onclick="addNoteO()">+ Add note</button></div></div></div>
+ <div class="card sum" id="osum"></div>
+ <button class="btn p" style="width:100%" onclick="submitOvh()">Send overhaul to workshop</button>
+ <p class="mu" style="margin:8px 0 0">The total is an estimate. The cashier checks and finishes the job in the main app.</p>`;
+}
+function submitOvh(){
+ const plate=OF.plate.trim().toUpperCase(),a=num(OF.price),sp=ovJS(),jf=OF.jl.filter(l=>num(l.price)>0||l.name.trim()),sname=jf.map(l=>l.name.trim()||((L.services.find(x=>x.id===l.sid)||{}).name)||"").filter(Boolean).join(" + "),sid=(jf.find(l=>l.sid)||{}).sid||"";
+ if(!plate){msg={t:"er",m:"Enter the plate number (or NON DS)."};return draw()}
+ const sl=OF.sl.filter(l=>l.sid||l.name.trim()||num(l.price)>0).map(l=>({id:l.id,sid:l.sid,name:l.name.trim(),price:num(l.price),mech:l.mech||OF.mech||""}));
+ if(a<=0&&sp<=0&&!sl.some(l=>l.price>0)&&!OF.notes.length){msg={t:"er",m:"Masukkan harga overhaul, harga jasa, Jasa Spesial, atau catatan."};return draw()}
+ if(sl.some(l=>l.price>0&&!l.mech)){msg={t:"er",m:"Pilih mekanik untuk setiap Jasa Spesial."};return draw()}
+ {const bad=bxCheck(OF.pl);if(bad){msg={t:"er",m:bad};return draw()}}
+ const pl=OF.pl.filter(l=>l.pid||bxLive(l)).map(l=>l.bx?bxOut(l):{id:l.id,pid:l.pid,qty:Math.max(1,num(l.qty)||1),rj:l.rj||"",rjf:num(l.rjf),rjn:l.rjn||"",rd:l.rd?1:0});
+ const e={id:uid(),created:Date.now(),kind:"ovh",date:today(),queue:Math.floor(num(($("g-q")||{}).value||OF.q))||nextQ(),plate,eng:OF.eng.trim().toUpperCase(),motor:OF.motor.trim(),cust:OF.cust.trim(),phone:OF.phone.trim(),addr:OF.addr.trim(),name:OF.name.trim(),price:a,mech:OF.mech||"",sid,sname,sprice:sp>0?sp:0,note:"",pl,sl,notes:OF.notes.map(n=>({id:n.id,text:n.text,why:n.why}))};
+ P.push(e);sv(PK,P);OF=blankOF();AF2={};msg={t:"ok",m:"Overhaul sent to the main app: "+plate+(online?"":" (saved, will send when online)")};scrollTo(0,0);draw();
+ flush().then(()=>{setTimeout(refresh,3500)});
+}
+
+/* ---- LCR: the front desk records the vehicle and the job only. Price, mechanic pay, cost, profit and voucher value are
+   never shown or copied here; the main app fills them in from its LCR motor table. ---- */
+const LKIND={T:"LCR Treatment",R:"LCR Ganti Rangka"};
+const lcrSts=k=>k==="R"?["Order","Working"]:["Working"];
+const lcrVF=v=>{const s=String(v||"").toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,10);return [s.slice(0,3),s.slice(3,6),s.slice(6)].filter(Boolean).join(" ")};
+function lcrBlank(){return{plate:"",motor:"",km:"",eng:"",frame:"",cust:"",phone:"",lk:"T",status:"Working",mech:"",vno:""}}
+let LF=lcrBlank(),LKF="",LVF="",LM="";
+const mName=m=>new Date(m+"-01T00:00:00").toLocaleDateString("en-GB",{month:"long",year:"numeric"});
+const lcrRd=o=>(o.done||o.date||"").slice(0,7);
+const lcrDupV=vn=>!!vn&&(A(L.lcrV).includes(vn)||P.some(e=>e.kind==="lcr"&&e.vno===vn));
+function lcrKind(k){LF.lk=k;LF.status=lcrSts(k)[0];keep(draw)}
+function lcrSubmit(){
+ const plate=LF.plate.trim().toUpperCase(),k=LF.lk,st=lcrSts(k).includes(LF.status)?LF.status:lcrSts(k)[0],vn=lcrVF(LF.vno);
+ if(!plate){msg={t:"er",m:"Enter the plate number."};return draw()}
+ if(!LF.motor){msg={t:"er",m:"Select the motor type."};return draw()}
+ if(st!=="Order"&&!LF.mech){msg={t:"er",m:"Select the worker (only Order status can be saved without a worker)."};return draw()}
+ if(lcrDupV(vn)){msg={t:"er",m:"This voucher number is already used by another LCR job."};return draw()}
+ const e={id:uid(),created:Date.now(),kind:"lcr",date:today(),plate,motor:LF.motor,km:Math.max(0,Math.round(num(LF.km))),eng:LF.eng.trim().toUpperCase(),frame:LF.frame.trim().toUpperCase(),cust:LF.cust.trim(),phone:LF.phone.trim(),lk:k,status:st,mech:LF.mech,vno:vn};
+ P.push(e);sv(PK,P);const mk=LF.mech;LF=lcrBlank();LF.mech=mk;
+ msg={t:"ok",m:"LCR sent to the main app: "+plate+(online?"":" (saved, will send when online)")};scrollTo(0,0);draw();
+ flush().then(()=>{setTimeout(refresh,3500)});
+}
+function vLcr(){
+ const mo=sel=>`<option value="" ${sel?"":"selected"} disabled>— Select worker —</option>`+(L.mechs.includes(sel)||!sel?L.mechs:[...L.mechs,sel]).map(m=>`<option value="${esc(m)}" ${m===sel?"selected":""}>${esc(m)}</option>`).join("");
+ const mt=A(L.lcrTypes).slice();if(LF.motor&&!mt.includes(LF.motor))mt.push(LF.motor);
+ const stOf=s=>s==="Done"?"Done":s==="Working"?"IP":"W";
+ const cur=today().slice(0,7),PMo=LM||cur,all0=A(L.lcr),
+  ms=[...new Set([cur,PMo,...all0.map(lcrRd).filter(Boolean)])].sort().reverse(),
+  all=all0.filter(e=>lcrRd(e)===PMo),
+  list=all.filter(e=>(!LKF||e.lk===LKF)&&(!LVF||(e.vh&&e.vs===LVF))).sort((a,b)=>(b.date||"").localeCompare(a.date||"")||(a.status==="Done")-(b.status==="Done")),
+  fb=(cur,set,v,l)=>`<button type="button" class="btn ${cur===v?"p":""}" style="flex:1;font-size:12px" onclick="${set}='${v}';keep(draw)">${l}</button>`,
+  custLn=e=>e.cust||e.phone?`<div class="mu">${e.cust?`<span>Customer</span> ${esc(e.cust)}`:""}${e.cust&&e.phone?" · ":""}${e.phone?esc(e.phone):""}</div>`:"",
+  pend=PMo===cur?P.filter(e=>e.kind==="lcr").map(e=>`<div class="q"><div><b>${esc(e.plate)}</b> <span class="mu">${esc(e.motor)}</span><div class="mu"><span>${LKIND[e.lk]||LKIND.T}</span> · <span>Waiting to send…</span></div>${custLn(e)}</div><span class="st W">Pending</span></div>`).join(""):"",
+  jobs=list.map(e=>`<div class="q"><div><b>${esc(e.plate||"-")}</b> <span class="mu">${esc(e.motor)}${e.km?" · "+e.km.toLocaleString("id-ID")+" KM":""}</span><div class="mu"><span>${LKIND[e.lk]||LKIND.T}</span> · ${esc(e.date)}${e.done&&e.done!==e.date?" → "+esc(e.done):""}${e.mech?" · "+esc(e.mech):""}</div>${e.eng||e.frame?`<div class="mu">${e.eng?`<span>Engine</span> ${esc(e.eng)}`:""}${e.eng&&e.frame?" &nbsp;":""}${e.frame?`<span>Frame</span> ${esc(e.frame)}`:""}</div>`:""}${custLn(e)}${e.vno?`<div class="mu">${esc(e.vno)} · <span>${e.vs==="Claimed"?"Claimed":"Waiting"}</span></div>`:""}</div><span class="st ${stOf(e.status)}">${esc(e.status||"Working")}</span></div>`).join("");
+ return `<div class="card" data-nomini><h2>Add LCR job</h2><div class="g">
+ <div class="s2"><label>Job type</label><div style="display:flex;gap:6px">${["T","R"].map(k=>`<button type="button" class="btn ${LF.lk===k?"p":""}" style="flex:1" onclick="lcrKind('${k}')">${LKIND[k]}</button>`).join("")}</div></div>
+ <div><label>Date</label><input readonly tabindex="-1" aria-readonly="true" value="${esc(tglLbl())}" style="cursor:default"></div>
+ <div><label>Plate number</label><input id="l-plate" value="${esc(LF.plate)}" placeholder="DS 1234 AB" autocapitalize="characters" autocomplete="off" style="text-transform:uppercase" oninput="LF.plate=this.value.toUpperCase()"></div>
+ <div><label>Motor type</label><select onchange="LF.motor=this.value"><option value="">Select motor…</option>${mt.map(m=>`<option value="${esc(m)}" ${m===LF.motor?"selected":""}>${esc(m)}</option>`).join("")}</select></div>
+ <div><label>Mileage (KM)</label><input type="number" inputmode="numeric" min="0" value="${esc(LF.km)}" placeholder="0" oninput="LF.km=this.value"></div>
+ <div><label>Engine number</label><input value="${esc(LF.eng)}" autocomplete="off" style="text-transform:uppercase" oninput="LF.eng=this.value.toUpperCase()"></div>
+ <div><label>Frame number</label><input value="${esc(LF.frame)}" autocomplete="off" style="text-transform:uppercase" oninput="LF.frame=this.value.toUpperCase()"></div>
+ <div><label>Customer name</label><input value="${esc(LF.cust)}" autocomplete="off" oninput="LF.cust=this.value"></div>
+ <div><label>Phone number</label><input type="tel" inputmode="tel" value="${esc(LF.phone)}" autocomplete="off" oninput="LF.phone=this.value" placeholder="08xx xxxx xxxx"></div>
+ <div><label>Worker</label><select onchange="LF.mech=this.value">${mo(LF.mech)}</select></div>
+ <div><label>Work status</label><select onchange="LF.status=this.value">${lcrSts(LF.lk).map(s=>`<option value="${s}" ${s===LF.status?"selected":""}>${s}</option>`).join("")}</select></div>
+ <div class="s2"><label>Voucher number</label><input value="${esc(LF.vno)}" inputmode="numeric" autocomplete="off" placeholder="xxx xxx xxxx" oninput="this.value=lcrVF(this.value);LF.vno=this.value"></div></div>
+ ${mt.length?"":'<p class="mu" style="margin:8px 0 0">No LCR motor types yet. Ask the owner to add them in the main app.</p>'}
+ <p class="mu" style="margin:8px 0 10px">Only the vehicle and the job are recorded here. Everything else is handled by the owner in the main app.</p>
+ <button class="btn p" type="button" onclick="lcrSubmit()">Send LCR to workshop</button></div>
+ <div class="card" data-nomini><label>Month</label><select onchange="LM=this.value;keep(draw)">${ms.map(m=>`<option value="${m}" ${m===PMo?"selected":""}>${mName(m)}</option>`).join("")}</select></div>
+ <div class="card"><h2>LCR jobs · ${mName(PMo)}</h2>
+ <div style="display:flex;gap:6px;margin-bottom:6px">${fb(LKF,"LKF","","All")}${fb(LKF,"LKF","T","LCR Treatment")}${fb(LKF,"LKF","R","LCR Ganti Rangka")}</div>
+ <div style="display:flex;gap:6px;margin-bottom:8px">${fb(LVF,"LVF","","All vouchers")}${fb(LVF,"LVF","Waiting","Voucher waiting")}${fb(LVF,"LVF","Claimed","Voucher claimed")}</div>
+ ${pend}${jobs||(pend?"":'<div class="mu">No LCR jobs this month.</div>')}</div>
+ <button class="btn" onclick="refresh()">⟳ Refresh</button>`;
+}
+
+/* ---- Spareparts: front desk sees only SKU, name, sell price, jasa wo/s, jasa w/s. Input once; only the owner can change a priced part. ---- */
+const stkN=p=>Math.max(0,Math.floor(num(p&&p.stock)));
+const isOpen=p=>!(num(p.price)>0);
+function listHTML(){
+ const ws=PQ.toLowerCase().trim().split(/\s+/).filter(Boolean),all=ws.length?L.parts.filter(p=>{const h=(p.sku+" "+p.name).toLowerCase();return ws.every(w=>h.includes(w))}):L.parts;
+ const rows=all.slice().sort((a,b)=>(a.sku+" "+a.name).localeCompare(b.sku+" "+b.name,undefined,{numeric:true})).slice(0,PLim);
+ if(!rows.length)return '<div class="mu">No spareparts found.</div>';
+ return rows.map(p=>{
+  if(!isOpen(p))return `<div class="rpt"><div><label>SKU</label><div class="v">${esc(p.sku)}</div></div><div><label>Name</label><div class="v">${esc(p.name)}</div></div><div><label>QTY</label><div class="v">${stkN(p)}</div></div><div><label>Sell price</label><div class="v">${rp(p.price)}</div></div><div><label>Jasa wo/s</label><div class="v">${rp(p.jd)}</div></div><div><label>Jasa w/s</label><div class="v">${rp(p.jt)}</div></div><div class="sv"><span class="lock">🔒 Locked · only the owner can change this</span></div></div>`;
+  const e=PE[p.id]||(PE[p.id]={name:p.name,price:"",jd:p.jd||"",jt:p.jt||""});
+  return `<div class="rpt"><div><label>SKU</label><div class="v">${esc(p.sku)}</div></div><div><label>Name</label><input value="${esc(e.name)}" oninput="PE['${p.id}'].name=this.value"></div><div><label>QTY</label><div class="v">${stkN(p)}</div></div><div><label>Sell price</label><input type="number" inputmode="numeric" value="${esc(e.price)}" placeholder="0" oninput="PE['${p.id}'].price=this.value"></div><div><label>Jasa wo/s</label><input type="number" inputmode="numeric" value="${esc(e.jd)}" placeholder="0" oninput="PE['${p.id}'].jd=this.value"></div><div><label>Jasa w/s</label><input type="number" inputmode="numeric" value="${esc(e.jt)}" placeholder="0" oninput="PE['${p.id}'].jt=this.value"></div><div class="sv"><span class="lock">Price not set yet · can be entered once</span><button class="btn p" onclick="savePart('${p.id}')">Save</button></div></div>`}).join("")+(all.length>PLim?`<button class="btn" style="margin-top:10px" onclick="PLim+=50;plRefresh()">Show more (${all.length-PLim} left)</button>`:"");
+}
+function plRefresh(){const e=$("plist");if(e)e.innerHTML=listHTML()}
+/* Packages: view only for the front desk (no edit, no add, no delete) */
+let PKQ="",PKX=(()=>{try{const x=JSON.parse(localStorage.getItem("fd_pkx"));return x&&typeof x==="object"?x:{}}catch(e){return{}}})();
+function pkSave(){try{localStorage.setItem("fd_pkx",JSON.stringify(PKX))}catch(e){}}
+function pkTg(id){PKX[id]=!PKX[id];pkSave();pkRefresh()}
+function pkAll(close){L.pkgs.forEach(k=>{PKX[k.id]=!!close});pkSave();pkRefresh()}
+function pkListHTML(){
+ const ws=PKQ.toLowerCase().trim().split(/\s+/).filter(Boolean),
+ all=L.pkgs.filter(k=>{const h=(k.name+" "+k.items.map(i=>{const p=findSku(i.sku);return i.sku+" "+(p?p.name:"")}).join(" ")).toLowerCase();return ws.every(w=>h.includes(w))}).slice().sort((x,y)=>(x.name||"Package").localeCompare(y.name||"Package",undefined,{sensitivity:"base",numeric:true}));
+ if(!all.length)return '<div class="mu">No package found.</div>';
+ return all.map(k=>{
+  const cl=!!PKX[k.id],its=k.items.filter(i=>i.sku.trim()),tot=its.reduce((a,i)=>{const p=findSku(i.sku);return a+(p?num(p.price):0)*i.qty},0);
+  const rows=its.length?its.map(i=>{const p=findSku(i.sku);return `<div style="display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-top:1px dashed var(--bd)"><div style="min-width:0;word-break:break-word"><b>${esc(i.sku)}</b>${p?" · "+esc(p.name):""} <span class="mu">× ${i.qty}</span></div><b style="white-space:nowrap">${p?rp(num(p.price)*i.qty):"-"}</b></div>`}).join(""):'<div class="mu">This package has no items yet.</div>';
+  return `<div style="border:1.5px solid var(--ac);border-radius:10px;margin:0 0 10px;overflow:hidden"><div role="button" tabindex="0" aria-expanded="${!cl}" onclick="pkTg('${k.id}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();pkTg('${k.id}')}" style="cursor:pointer;background:var(--bg);padding:8px 10px;${cl?"":"border-bottom:1px solid var(--ac)"}"><div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline;color:var(--ac)"><b style="min-width:0;word-break:break-word"><span style="font-size:12px;margin-right:6px">${cl?"▸":"▾"}</span>${esc(k.name||"Package")}</b><b style="white-space:nowrap">${rp(tot+num(k.jd||k.jt))}</b></div><div style="margin-top:2px;font-size:12px;font-weight:600;color:var(--yl)">Jasa paket ${rp(k.jd||k.jt)}</div></div>${cl?"":`<div style="padding:2px 10px 6px">${rows}</div>`}</div>`}).join("");
+}
+function pkRefresh(){const e=$("pklist");if(e)e.innerHTML=pkListHTML()}
+function vParts(){
+ return `<div class="card"><h2>Add sparepart</h2><p class="mu" style="margin:0 0 8px">Enter it once. After saving, the sell price and service fees are locked. If there is a mistake, ask the owner to change it in the main app.</p>
+ <div class="g"><div><label>SKU</label><input value="${esc(NPF.sku)}" autocapitalize="characters" autocomplete="off" oninput="NPF.sku=this.value.toUpperCase()"></div><div><label>Name</label><input value="${esc(NPF.name)}" autocomplete="off" oninput="NPF.name=this.value"></div></div>
+ <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px"><div><label>Sell price</label><input type="number" inputmode="numeric" value="${esc(NPF.price)}" placeholder="0" oninput="NPF.price=this.value"></div><div><label>Jasa wo/s</label><input type="number" inputmode="numeric" value="${esc(NPF.jd)}" placeholder="0" oninput="NPF.jd=this.value"></div><div><label>Jasa w/s</label><input type="number" inputmode="numeric" value="${esc(NPF.jt)}" placeholder="0" oninput="NPF.jt=this.value"></div></div>
+ <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn p" onclick="savePart('')">+ Add sparepart</button><button class="btn" onclick="openScan('sku')">📷 Scan barcode</button></div></div>
+ <div class="card"><h2>Spareparts (${L.parts.length})</h2><input type="search" value="${esc(PQ)}" placeholder="Search SKU or name…" oninput="PQ=this.value;PLim=50;plRefresh()" style="margin-bottom:6px"><div id="plist">${listHTML()}</div></div>
+ <div class="card"><h2>Packages (${L.pkgs.length})</h2><input type="search" value="${esc(PKQ)}" placeholder="Search package, SKU or part name…" oninput="PKQ=this.value;pkRefresh()" style="margin-bottom:6px"><div style="display:flex;gap:8px;margin:0 0 8px"><button class="btn" onclick="pkAll(1)">－ Ciutkan semua</button><button class="btn" onclick="pkAll(0)">＋ Buka semua</button></div><div id="pklist">${pkListHTML()}</div></div>`;
+}
+function savePart(id){
+ const src=id?PE[id]:NPF;if(!src)return;
+ let sku=id?(part(id)||{}).sku:T(NPF.sku).trim().toUpperCase();
+ const name=T(src.name).trim(),price=Math.round(num(src.price)),jd=Math.max(0,Math.round(num(src.jd))),jt=Math.max(0,Math.round(num(src.jt)));
+ if(!sku){alert("Enter the SKU.");return}
+ if(!name){alert("Enter the name.");return}
+ if(!(price>0)){alert("Enter the sell price.");return}
+ const ex=id?part(id):findSku(sku);
+ if(ex&&!isOpen(ex)){alert(ex.sku+" · "+ex.name+" is already in the list and its price is locked. Ask the owner to change it.");return}
+ if(!confirm("Save "+sku+" · "+name+"\nSell price "+rp(price)+" · Jasa wo/s "+rp(jd)+" · Jasa w/s "+rp(jt)+"\n\nAfter saving, only the owner can change these. Save?"))return;
+ const pid=ex?ex.id:uid();
+ P.push({id:uid(),created:Date.now(),kind:"part",pid,sku,name,price,jd,jt});sv(PK,P);
+ PPs=PPs.filter(x=>x.id!==pid);PPs.push({id:pid,sku,name,price,jd,jt,t:Date.now()});sv(PPK,PPs);
+ if(ex)Object.assign(ex,{name,price,jd,jt});else L.parts.push({id:pid,sku,name,price,stock:0,jd,jt});
+ sv(LK,L);if(id)delete PE[id];else NPF={sku:"",name:"",price:"",jd:"",jt:""};
+ msg={t:"ok",m:"Saved: "+sku+" · "+name+(online?"":" (will send when online)")};draw();flush().then(()=>setTimeout(refresh,3500));
+}
+function setup(){
+ return `<div class="card"><h2>Masuk ke aplikasi utama</h2>
+ <p class="mu" style="margin:0 0 10px">Masuk dengan <b>akun Firebase</b> yang sama (atau akun front desk yang dibuat pemilik). Semua yang diketik di sini langsung masuk ke aplikasi utama.</p>
+ <label>Email</label><input id="em" type="email" autocomplete="username" autocapitalize="off">
+ <label>Password</label><input id="pw" type="password" autocomplete="current-password">
+ <div style="margin:10px 0"><button class="btn p" onclick="connect()">Masuk</button></div><p class="mu" id="sm">${FB.ok?"":"firebase-config.js belum diisi."}</p></div>`;
+}
+async function connect(){
+ const e=($("em").value||"").trim(),p=$("pw").value||"";if(!e||!p){$("sm").textContent="Isi email dan password.";return}
+ $("sm").textContent="Memeriksa…";
+ try{await FB.login(e,p);C={token:"fb",gid:"fb"};sv(CK,C);msg=null;draw();await refresh();draw()}
+ catch(x){$("sm").textContent="Tidak bisa masuk: "+FB.msg(x)}
+}
+function gear(){if(confirm("Putuskan perangkat ini dari aplikasi utama?")){try{FB.logout()}catch(e){}C={token:"",gid:""};sv(CK,C);draw()}}
+
+draw();refresh();flush();
+setInterval(()=>{if(document.visibilityState==="visible"){flush();refresh()}},15000);
+addEventListener("online",()=>{flush();refresh()});
+</script><style>
+.instSlot{display:none;margin:0 0 12px}
+.instSlot button{width:100%;background:#cc0000;color:#fff;border:0;border-radius:10px;padding:13px 16px;font:700 15px system-ui,sans-serif}
+@media (display-mode:standalone){.instSlot{display:none!important}}
+</style>
+<script>
+(function(){var p=null;
+if(matchMedia('(display-mode: standalone)').matches||navigator.standalone)return;
+function fill(){if(!p)return;document.querySelectorAll('.instSlot').forEach(function(s){if(s.firstChild)return;s.innerHTML='<button type="button" onclick="instGo()">Pasang aplikasi (tanpa bilah alamat)</button>';s.style.display='block'})}
+window.instGo=function(){if(!p)return;p.prompt();p.userChoice.finally(function(){p=null;document.querySelectorAll('.instSlot').forEach(function(s){s.innerHTML='';s.style.display='none'})})};
+addEventListener('beforeinstallprompt',function(e){e.preventDefault();p=e;fill()});
+addEventListener('appinstalled',function(){p=null;document.querySelectorAll('.instSlot').forEach(function(s){s.innerHTML='';s.style.display='none'})});
+new MutationObserver(fill).observe(document.body,{childList:true,subtree:true});
+})();
+</script>
+<style>
+/* tombol "+ Tambah ..." dibuat menonjol supaya mudah terlihat di HP / tablet */
+.btn.addb{--c:#475569;background:var(--c)!important;border:2px solid var(--c)!important;color:#fff!important;font-weight:700;border-radius:10px;min-height:48px;font-size:15px;padding:10px 16px;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.btn.addb.ab-wk{--c:#d97706}.btn.addb.ab-sp{--c:#7c3aed}.btn.addb.ab-pt{--c:#2563eb}.btn.addb.ab-bx{--c:#0d9488}
+.btn.addb:active{filter:brightness(.85);transform:scale(.97)}
+/* pembeda hasil tombol: sparepart biasa = biru, sparepart beli = hijau tosca, dari paket = hijau */
+.row.pl-n,.row.pl-b,.row.pl-k{border-style:solid!important;border-width:2px!important;border-radius:10px!important;padding:10px!important;margin-bottom:10px!important}
+.row.pl-n{border-color:#2563eb!important;background:color-mix(in srgb,#2563eb 7%,var(--card))}
+.row.pl-b{border-color:#0d9488!important;background:color-mix(in srgb,#0d9488 7%,var(--card))}
+.row.pl-k{border-color:#16a34a!important;background:color-mix(in srgb,#16a34a 7%,var(--card))}
+/* paket: semua baris sparepart dalam 1 border hijau */
+.pkgrp{border:2px solid #16a34a;border-radius:10px;background:color-mix(in srgb,#16a34a 7%,var(--card));padding:2px 10px;margin-bottom:10px}
+.pkgrp>.row{border:0!important;border-bottom:1px dashed color-mix(in srgb,#16a34a 55%,transparent)!important;border-radius:0!important;background:transparent!important;padding:10px 0!important;margin:0!important}
+.pkgrp>.row:last-child{border-bottom:0!important}
+.pkgrp>.rec{margin:6px 0 10px}
+/* pembeda pekerjaan: jasa biasa = oranye, Jasa Spesial = ungu */
+.row.wk-n,.row.wk-s{border-style:solid!important;border-width:2px!important;border-radius:10px!important;padding:10px!important;margin-bottom:10px!important}
+.row.wk-n{border-color:#d97706!important;background:color-mix(in srgb,#d97706 7%,var(--card))}
+.row.wk-s{border-color:#7c3aed!important;background:color-mix(in srgb,#7c3aed 7%,var(--card))}
+@media (max-width:900px){.btn.addb{min-height:52px;font-size:16px}}
+</style>
+<script>
+(function(){var t=0;
+function tag(){t=0;document.querySelectorAll("button.btn:not(.x):not(.addb)").forEach(function(b){var x=b.textContent;if(/^\s*\+/.test(x)&&!b.closest(".hd")){var k=/jasa spesial/i.test(x)?"sp":/\(beli\)/i.test(x)?"bx":/pekerjaan|add work/i.test(x)?"wk":/sparepart/i.test(x)?"pt":"";b.classList.add("addb");if(k)b.classList.add("ab-"+k)}})}
+function q(){if(!t)t=setTimeout(tag,60)}
+new MutationObserver(q).observe(document.body,{childList:true,subtree:true,characterData:true});tag()})();
+</script>
+</body></html>
