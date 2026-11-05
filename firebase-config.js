@@ -1,7 +1,7 @@
-/* Isi sekali dari Firebase Console → Project settings → Your apps → Web app → Config */
+/* Firebase web config - project CENDERAWASIH 3 */
 window.FIREBASE_CONFIG = {
-  apiKey: "PASTE_API_KEY",
-  authDomain: "PASTE_PROJECT.firebaseapp.com",
-  projectId: "PASTE_PROJECT_ID",
-  appId: "PASTE_APP_ID"
+  apiKey: "AIzaSyAy5hZv3L5tLEwJ0e-aNYbgaipYlDMy1Sg",
+  authDomain: "cenderawasih-3.firebaseapp.com",
+  projectId: "cenderawasih-3",
+  appId: "1:665298231869:web:03c127d9bdb05db37e8054"
 };
